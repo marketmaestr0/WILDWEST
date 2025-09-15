@@ -50,18 +50,18 @@
             --primary-bg: #0d1117;
             --secondary-bg: #161b22;
             --accent-bg: #21262d;
-            --card-bg: linear-gradient(145deg, #1c2128 0%, #30363d  50%, #21262d 100%);
+            --card-bg: linear-gradient(145deg, #1c2128 0%, #30363d 50%, #21262d 100%);
             --metallic-bg: linear-gradient(145deg, #2d3748 0%, #4a5568 50%, #2d3748 100%);
             --submarine-metal: linear-gradient(145deg, #2c5530 0%, #68d391 25%, #38a169 50%, #2c5530 100%);
             --console-metal: linear-gradient(145deg, #4a5568 0%, #718096 50%, #4a5568 100%);
-            
+
             /* Text Colors */
             --primary-text: #f0f6fc;
             --secondary-text: #7d8590;
             --accent-text: #58a6ff;
             --success-text: #00d4ff;
             --warning-text: #f85149;
-            
+
             /* Interactive Colors */
             --accent-color: #58a6ff;
             --success-color: #0099cc;
@@ -70,14 +70,14 @@
             --console-blue: #00d4ff;
             --console-amber: #ffbf00;
             --console-red: #ff073a;
-            
+
             /* Effects */
             --metallic-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             --button-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             --console-glow: 0 0 20px rgba(0, 212, 255, 0.4);
             --border-radius: 8px;
             --button-radius: 50%;
-            
+
             /* Spacing */
             --spacing-xs: 4px;
             --spacing-sm: 8px;
@@ -1276,9 +1276,28 @@
             }
         }
 
-        .search-input {
+        .search-filter-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
             width: 100%;
-            padding: 16px 20px;
+            /* Makes it take full width of parent */
+            gap: 0;
+            /* No gap so input and button touch */
+        }
+
+        .search-input {
+
             background: rgba(15, 23, 42, 0.8);
             border: 2px solid rgba(148, 163, 184, 0.2);
             border-radius: 12px;
@@ -1287,6 +1306,10 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
             position: relative;
+            flex: 1; /* Fills all available space */
+  padding: 0.5rem 0.75rem;
+  border-right: none; /* Seamless join with button */
+  border-radius: 8px 0 0 8px;
         }
 
         .search-input:focus {
@@ -1299,8 +1322,37 @@
             transform: translateY(-1px);
         }
 
-        .seacrh-input::placeholder {
+        .search-input::placeholder {
             color: #6b7280;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 0 0 48px; /* Fixed width — change to your preferred size */
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-color-hover);
+            transform: translateY(-50%) scale(1.1);
         }
     </style>
 
@@ -3881,34 +3933,42 @@
                             <form id="tokenForm">
                                 <div class="form-group">
                                     <label>Staking Token Address</label>
-                                    <input type="text" id="stakingToken" class="form-input" placeholder="0x0000... (or 0x0 for ETH)" required>
+                                    <input type="text" id="stakingToken" class="form-input"
+                                        placeholder="0x0000... (or 0x0 for ETH)" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Reward Token Address</label>
-                                    <input type="text" id="rewardToken" class="form-input" placeholder="0x0000... (or 0x0 for ETH)" required>
+                                    <input type="text" id="rewardToken" class="form-input"
+                                        placeholder="0x0000... (or 0x0 for ETH)" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Early Withdrawal Fee Period (days)</label>
-                                    <input type="number" id="lockPeriod" class="form-input" placeholder="30" min="0" required>
+                                    <input type="number" id="lockPeriod" class="form-input" placeholder="30" min="0"
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label>Early Withdrawal Fee (%)</label>
-                                    <input type="number" id="earlyFee" class="form-input" placeholder="5" min="0" max="50" step="0.1" required>
+                                    <input type="number" id="earlyFee" class="form-input" placeholder="5" min="0"
+                                        max="50" step="0.1" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Annual Percentage Yield (%)</label>
-                                    <input type="number" id="apy" class="form-input" placeholder="12.5" min="0.1" max="1000" step="0.1" required>
+                                    <input type="number" id="apy" class="form-input" placeholder="12.5" min="0.1"
+                                        max="1000" step="0.1" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Minimum Stake Amount</label>
-                                    <input type="number" id="minStake" class="form-input" placeholder="0.01" min="0" step="0.000001" required>
+                                    <input type="number" id="minStake" class="form-input" placeholder="0.01" min="0"
+                                        step="0.000001" required>
                                 </div>
                                 <div class="form-group" style="grid-column: 1 / -1;">
                                     <label>Contract Name</label>
-                                    <input type="text" id="contractName" class="form-input" placeholder="My Staking Pool" required>
+                                    <input type="text" id="contractName" class="form-input"
+                                        placeholder="My Staking Pool" required>
                                 </div>
                                 <div class="btn-group btn-group-full" style="display:flex;justify-content:center;">
-                                    <button type="submit" class="btn btn-primary" id="createTokenBtn">Deploy Contract</button>
+                                    <button type="submit" class="btn btn-primary" id="createTokenBtn">Deploy
+                                        Contract</button>
                                 </div>
                             </form>
                             <div id="deployStatus"></div>
@@ -3918,22 +3978,26 @@
                         <div class="card" id="stakingDirectoryCard">
                             <div class="card-title">Staking Contracts Directory</div>
                             <div class="search-box">
-                                <input type="text" id="searchInput" class="search-input" placeholder="Search by contract name, token symbol, or address..." />
+                                <input type="text" id="searchInput" class="search-input"
+                                    placeholder="Search by contract name, token symbol, or address..." />
                                 <button class="search-btn" onclick="searchContracts()">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.35-4.35"></path>
                                     </svg>
                                 </button>
                             </div>
-                            
+
                             <div class="results-info">
                                 <span id="resultsCount">Loading contracts...</span>
                                 <button class="refresh-btn" onclick="refreshDirectory()" title="Refresh Directory">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <polyline points="23 4 23 10 17 10"></polyline>
                                         <polyline points="1 20 1 14 7 14"></polyline>
-                                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15">
+                                        </path>
                                     </svg>
                                 </button>
                             </div>
@@ -3982,6 +4046,8 @@
         </footer>
     </div>
 
+
+    <!--JOSH - FYI WHAT IS THIS? RANDOM BOX AT BOTTOM OF SCREEN THAT I CAN CLICK TO CLOSE-->
     <!-- Staking Modal -->
     <div id="stakingModal" class="modal">
         <div class="modal-content">
@@ -3990,7 +4056,6 @@
             <div id="modalContent"></div>
         </div>
     </div>
-   
 
 
 
@@ -3999,7 +4064,8 @@
 
 
 
-    
+
+
 
     <!-- Wallet Modal - Positioned at body level for proper z-index -->
     <div id="walletModal" class="wallet-modal" style="display: none;">
@@ -4010,7 +4076,8 @@
             </div>
             <div class="wallet-options">
                 <div class="mobile-notice">
-                    <strong>Mobile Users:</strong> Open this page inside your wallet app's built-in browser for the best experience.
+                    <strong>Mobile Users:</strong> Open this page inside your wallet app's built-in browser for the best
+                    experience.
                 </div>
                 <button class="wallet-option" onclick="connectSpecificWallet('metamask')">
                     <span class="wallet-name">MetaMask</span>
@@ -4062,7 +4129,8 @@
                     <input type="number" id="depositAmount" class="admin-input" placeholder="0.0" step="any" required>
                 </div>
                 <div class="admin-btn-group">
-                    <button type="button" class="admin-btn secondary" onclick="closeAdminModal('depositRewardsModal')">Cancel</button>
+                    <button type="button" class="admin-btn secondary"
+                        onclick="closeAdminModal('depositRewardsModal')">Cancel</button>
                     <button type="submit" class="admin-btn primary">Deposit Rewards</button>
                 </div>
             </form>
@@ -4091,16 +4159,21 @@
             <form id="withdrawFeesForm">
                 <div class="admin-form-group">
                     <label for="feeTokenAddress">Token Address</label>
-                    <input type="text" id="feeTokenAddress" class="admin-input" placeholder="0x0 for ETH, or paste token address" required>
-                    <small style="color: var(--console-blue); font-size: 0.75rem;">ETH: 0x0 | Check available amounts above</small>
+                    <input type="text" id="feeTokenAddress" class="admin-input"
+                        placeholder="0x0 for ETH, or paste token address" required>
+                    <small style="color: var(--console-blue); font-size: 0.75rem;">ETH: 0x0 | Check available amounts
+                        above</small>
                 </div>
                 <div class="admin-form-group">
                     <label for="feeWithdrawAmount">Amount to Withdraw</label>
-                    <input type="number" id="feeWithdrawAmount" class="admin-input" placeholder="0.0" step="any" required>
-                    <small style="color: var(--console-amber); font-size: 0.75rem;">Only withdrawable amounts shown above</small>
+                    <input type="number" id="feeWithdrawAmount" class="admin-input" placeholder="0.0" step="any"
+                        required>
+                    <small style="color: var(--console-amber); font-size: 0.75rem;">Only withdrawable amounts shown
+                        above</small>
                 </div>
                 <div class="admin-btn-group">
-                    <button type="button" class="admin-btn secondary" onclick="closeAdminModal('withdrawFeesModal')">Cancel</button>
+                    <button type="button" class="admin-btn secondary"
+                        onclick="closeAdminModal('withdrawFeesModal')">Cancel</button>
                     <button type="submit" class="admin-btn primary">Withdraw Fees/Rewards</button>
                 </div>
             </form>
@@ -4127,10 +4200,12 @@
             <form id="transferOwnershipForm">
                 <div class="admin-form-group">
                     <label for="newOwnerAddress">New Owner Address</label>
-                    <input type="text" id="newOwnerAddress" class="admin-input" placeholder="0x..." pattern="^0x[a-fA-F0-9]{40}$" required>
+                    <input type="text" id="newOwnerAddress" class="admin-input" placeholder="0x..."
+                        pattern="^0x[a-fA-F0-9]{40}$" required>
                 </div>
                 <div class="admin-btn-group">
-                    <button type="button" class="admin-btn secondary" onclick="closeAdminModal('transferOwnershipModal')">Cancel</button>
+                    <button type="button" class="admin-btn secondary"
+                        onclick="closeAdminModal('transferOwnershipModal')">Cancel</button>
                     <button type="submit" class="admin-btn danger">Transfer Ownership</button>
                 </div>
             </form>
@@ -4153,7 +4228,8 @@
                 </div>
             </div>
             <div class="admin-btn-group">
-                <button type="button" class="admin-btn secondary" onclick="closeAdminModal('stakeConfirmModal')">Cancel</button>
+                <button type="button" class="admin-btn secondary"
+                    onclick="closeAdminModal('stakeConfirmModal')">Cancel</button>
                 <button type="button" class="admin-btn primary" onclick="executeStake()">Confirm Stake</button>
             </div>
         </div>
@@ -4174,8 +4250,10 @@
                 <div id="confirmWithdrawWarning" style="margin-top: 1rem;"></div>
             </div>
             <div class="admin-btn-group">
-                <button type="button" class="admin-btn secondary" onclick="closeAdminModal('withdrawConfirmModal')">Cancel</button>
-                <button type="button" class="admin-btn primary" onclick="executeWithdrawal()">Confirm Withdrawal</button>
+                <button type="button" class="admin-btn secondary"
+                    onclick="closeAdminModal('withdrawConfirmModal')">Cancel</button>
+                <button type="button" class="admin-btn primary" onclick="executeWithdrawal()">Confirm
+                    Withdrawal</button>
             </div>
         </div>
     </div>
@@ -4192,7 +4270,8 @@
                 <strong>Contract:</strong> <span id="confirmClaimContract" class="mobile-address"></span>
             </div>
             <div class="admin-btn-group">
-                <button type="button" class="admin-btn secondary" onclick="closeAdminModal('claimConfirmModal')">Cancel</button>
+                <button type="button" class="admin-btn secondary"
+                    onclick="closeAdminModal('claimConfirmModal')">Cancel</button>
                 <button type="button" class="admin-btn primary" onclick="executeClaimRewards()">Claim Rewards</button>
             </div>
         </div>
@@ -4216,8 +4295,10 @@
                 <strong>Total Staked:</strong> <span id="emergencyTotalStaked"></span>
             </div>
             <div class="admin-btn-group">
-                <button type="button" class="admin-btn secondary" onclick="closeAdminModal('emergencyWithdrawModal')">Cancel</button>
-                <button type="button" class="admin-btn danger" onclick="confirmEmergencyWithdraw()">Enable Emergency Withdraw</button>
+                <button type="button" class="admin-btn secondary"
+                    onclick="closeAdminModal('emergencyWithdrawModal')">Cancel</button>
+                <button type="button" class="admin-btn danger" onclick="confirmEmergencyWithdraw()">Enable Emergency
+                    Withdraw</button>
             </div>
         </div>
     </div>
@@ -4234,61 +4315,61 @@
 
         // Factory ABI
         const FACTORY_ABI = [
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"contractAddress","type":"address"},{"indexed":true,"internalType":"address","name":"creator","type":"address"},{"indexed":false,"internalType":"string","name":"name","type":"string"},{"indexed":false,"internalType":"address","name":"stakingToken","type":"address"},{"indexed":false,"internalType":"address","name":"rewardToken","type":"address"}],"name":"StakingContractDeployed","type":"event"},
-            {"inputs":[{"internalType":"address","name":"_stakingToken","type":"address"},{"internalType":"address","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_lockPeriod","type":"uint256"},{"internalType":"uint256","name":"_earlyFee","type":"uint256"},{"internalType":"uint256","name":"_apy","type":"uint256"},{"internalType":"uint256","name":"_minStake","type":"uint256"},{"internalType":"string","name":"_name","type":"string"}],"name":"deployStakingContract","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"deployedContracts","outputs":[{"internalType":"address","name":"contractAddress","type":"address"},{"internalType":"address","name":"creator","type":"address"},{"internalType":"address","name":"stakingToken","type":"address"},{"internalType":"address","name":"rewardToken","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"lockPeriod","type":"uint256"},{"internalType":"uint256","name":"earlyFee","type":"uint256"},{"internalType":"uint256","name":"apy","type":"uint256"},{"internalType":"uint256","name":"minStake","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"getAllContracts","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getContractInfo","outputs":[{"components":[{"internalType":"address","name":"contractAddress","type":"address"},{"internalType":"address","name":"creator","type":"address"},{"internalType":"address","name":"stakingToken","type":"address"},{"internalType":"address","name":"rewardToken","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"lockPeriod","type":"uint256"},{"internalType":"uint256","name":"earlyFee","type":"uint256"},{"internalType":"uint256","name":"apy","type":"uint256"},{"internalType":"uint256","name":"minStake","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"}],"internalType":"struct StakingFactory.ContractInfo","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"getContractsByToken","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"getDeployedContractsCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserContracts","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"isStakingContract","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"userContracts","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}
+            { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contractAddress", "type": "address" }, { "indexed": true, "internalType": "address", "name": "creator", "type": "address" }, { "indexed": false, "internalType": "string", "name": "name", "type": "string" }, { "indexed": false, "internalType": "address", "name": "stakingToken", "type": "address" }, { "indexed": false, "internalType": "address", "name": "rewardToken", "type": "address" }], "name": "StakingContractDeployed", "type": "event" },
+            { "inputs": [{ "internalType": "address", "name": "_stakingToken", "type": "address" }, { "internalType": "address", "name": "_rewardToken", "type": "address" }, { "internalType": "uint256", "name": "_lockPeriod", "type": "uint256" }, { "internalType": "uint256", "name": "_earlyFee", "type": "uint256" }, { "internalType": "uint256", "name": "_apy", "type": "uint256" }, { "internalType": "uint256", "name": "_minStake", "type": "uint256" }, { "internalType": "string", "name": "_name", "type": "string" }], "name": "deployStakingContract", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "deployedContracts", "outputs": [{ "internalType": "address", "name": "contractAddress", "type": "address" }, { "internalType": "address", "name": "creator", "type": "address" }, { "internalType": "address", "name": "stakingToken", "type": "address" }, { "internalType": "address", "name": "rewardToken", "type": "address" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "uint256", "name": "lockPeriod", "type": "uint256" }, { "internalType": "uint256", "name": "earlyFee", "type": "uint256" }, { "internalType": "uint256", "name": "apy", "type": "uint256" }, { "internalType": "uint256", "name": "minStake", "type": "uint256" }, { "internalType": "uint256", "name": "createdAt", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "getAllContracts", "outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContractInfo", "outputs": [{ "components": [{ "internalType": "address", "name": "contractAddress", "type": "address" }, { "internalType": "address", "name": "creator", "type": "address" }, { "internalType": "address", "name": "stakingToken", "type": "address" }, { "internalType": "address", "name": "rewardToken", "type": "address" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "uint256", "name": "lockPeriod", "type": "uint256" }, { "internalType": "uint256", "name": "earlyFee", "type": "uint256" }, { "internalType": "uint256", "name": "apy", "type": "uint256" }, { "internalType": "uint256", "name": "minStake", "type": "uint256" }, { "internalType": "uint256", "name": "createdAt", "type": "uint256" }], "internalType": "struct StakingFactory.ContractInfo", "name": "", "type": "tuple" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }], "name": "getContractsByToken", "outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "getDeployedContractsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "user", "type": "address" }], "name": "getUserContracts", "outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "isStakingContract", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" }], "name": "userContracts", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }
         ];
 
         // Staking Contract ABI
         const STAKING_ABI = [
-            {"inputs":[{"internalType":"address","name":"_stakingToken","type":"address"},{"internalType":"address","name":"_rewardToken","type":"address"},{"internalType":"uint256","name":"_lockPeriod","type":"uint256"},{"internalType":"uint256","name":"_earlyFee","type":"uint256"},{"internalType":"uint256","name":"_apy","type":"uint256"},{"internalType":"uint256","name":"_minStake","type":"uint256"},{"internalType":"string","name":"_name","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"rewards","type":"uint256"}],"name":"RewardsClaimed","type":"event"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"Staked","type":"event"},
-            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"Withdrawn","type":"event"},
-            {"inputs":[],"name":"apy","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"canWithdrawWithoutFee","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"claimRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[],"name":"contractName","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"depositRewards","outputs":[],"stateMutability":"payable","type":"function"},
-            {"inputs":[],"name":"earlyFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"emergencyWithdrawEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"enableEmergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getPendingRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getStakedAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getStakeTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"lockPeriod","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"minStake","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[],"name":"rewardToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"payable","type":"function"},
-            {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakes","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"},{"internalType":"uint256","name":"rewards","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"stakingToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"totalRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[],"name":"totalStaked","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-            {"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawExcess","outputs":[],"stateMutability":"nonpayable","type":"function"},
-            {"stateMutability":"payable","type":"receive"}
+            { "inputs": [{ "internalType": "address", "name": "_stakingToken", "type": "address" }, { "internalType": "address", "name": "_rewardToken", "type": "address" }, { "internalType": "uint256", "name": "_lockPeriod", "type": "uint256" }, { "internalType": "uint256", "name": "_earlyFee", "type": "uint256" }, { "internalType": "uint256", "name": "_apy", "type": "uint256" }, { "internalType": "uint256", "name": "_minStake", "type": "uint256" }, { "internalType": "string", "name": "_name", "type": "string" }], "stateMutability": "nonpayable", "type": "constructor" },
+            { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" },
+            { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "rewards", "type": "uint256" }], "name": "RewardsClaimed", "type": "event" },
+            { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256" }], "name": "Staked", "type": "event" },
+            { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "fee", "type": "uint256" }], "name": "Withdrawn", "type": "event" },
+            { "inputs": [], "name": "apy", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "user", "type": "address" }], "name": "canWithdrawWithoutFee", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "claimRewards", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [], "name": "contractName", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "depositRewards", "outputs": [], "stateMutability": "payable", "type": "function" },
+            { "inputs": [], "name": "earlyFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "emergencyWithdrawEnabled", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "enableEmergencyWithdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [], "name": "getBalance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "user", "type": "address" }], "name": "getPendingRewards", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "user", "type": "address" }], "name": "getStakedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "user", "type": "address" }], "name": "getStakeTimestamp", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "lockPeriod", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "minStake", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [], "name": "rewardToken", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "stake", "outputs": [], "stateMutability": "payable", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "stakes", "outputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "uint256", "name": "timestamp", "type": "uint256" }, { "internalType": "uint256", "name": "lastClaimTime", "type": "uint256" }, { "internalType": "uint256", "name": "rewards", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "stakingToken", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "totalRewards", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "totalStaked", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "withdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "withdrawExcess", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "stateMutability": "payable", "type": "receive" }
         ];
 
         // Global variables
         let provider, signer, factoryContract, userAddress, currentNetwork;
         let tokenCache = {}; // Cache for ERC20 token information
-        
+
         // Hardcoded blacklist - hide all contracts deployed before this timestamp
         // Set to just before your latest contract to show your real contracts
         const BLACKLIST_BEFORE_TIMESTAMP = 1757299900; // September 7, 2025 9:51:40 PM - show contracts after this time
-        
+
         // Additional hardcoded blacklisted contract addresses (specific test contracts to hide)
         const HARDCODED_BLACKLIST = new Set([
             // These will be populated with current test contract addresses
@@ -4301,14 +4382,14 @@
                 if (!factoryContract) return;
                 const count = await factoryContract.getDeployedContractsCount();
                 console.log(`Found ${count.toNumber()} total contracts`);
-                
+
                 const addresses = [];
                 for (let i = 0; i < count.toNumber(); i++) {
                     const info = await factoryContract.getContractInfo(i);
                     addresses.push(info.contractAddress.toLowerCase());
                     console.log(`Contract ${i}: ${info.contractAddress}, created: ${info.createdAt ? info.createdAt.toNumber() : 'unknown'}`);
                 }
-                
+
                 console.log('All contract addresses to blacklist:', addresses);
                 return addresses;
             } catch (error) {
@@ -4323,7 +4404,7 @@
             if (HARDCODED_BLACKLIST.has(contractInfo.contractAddress.toLowerCase())) {
                 return true;
             }
-            
+
             // Check if contract was deployed before the blacklist timestamp
             const deploymentTime = contractInfo.createdAt ? contractInfo.createdAt.toNumber() : 0;
             return deploymentTime < BLACKLIST_BEFORE_TIMESTAMP;
@@ -4338,7 +4419,7 @@
         ];
 
         // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initializeApp();
             // Only load contracts after wallet connection, not on page load
             // loadContractsDirectory() and updateStats() will be called after wallet connects
@@ -4425,7 +4506,7 @@
         async function connectWallet() {
             // Detect platform and available wallets before showing modal
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
+
             if (isMobile) {
                 showMobileWalletModal();
             } else {
@@ -4437,15 +4518,15 @@
         function showMobileWalletModal() {
             const modal = document.getElementById('walletModal');
             const modalContent = modal.querySelector('.wallet-modal-content');
-            
+
             // Check if we're already in a wallet browser
             const isInWalletBrowser = window.ethereum && (
-                window.ethereum.isMetaMask || 
-                window.ethereum.isCoinbaseWallet || 
+                window.ethereum.isMetaMask ||
+                window.ethereum.isCoinbaseWallet ||
                 window.ethereum.isTrust ||
                 window.ethereum.isRabby
             );
-            
+
             if (isInWalletBrowser) {
                 // User is already in a wallet browser, attempt direct connection
                 closeWalletModal();
@@ -4453,7 +4534,7 @@
                 connectWithProvider(window.ethereum, walletType);
                 return;
             }
-            
+
             // User is NOT in a wallet browser, show guidance
             modalContent.innerHTML = `
                 <div class="wallet-modal-header">
@@ -4499,7 +4580,7 @@
                     Mobile browsers (Safari, Chrome) don't have wallet extensions. You need to use your wallet app's built-in browser to connect securely.</p>
                 </div>
             `;
-            
+
             modal.style.display = 'flex';
         }
 
@@ -4515,7 +4596,7 @@
         // Copy current page URL to clipboard
         function copyCurrentUrl() {
             const currentUrl = window.location.href;
-            
+
             navigator.clipboard.writeText(currentUrl).then(() => {
                 showStatus('URL copied to clipboard!', 'success');
             }).catch(() => {
@@ -4540,9 +4621,9 @@
             const availableWallets = detectWalletExtensions();
             const modal = document.getElementById('walletModal');
             const modalContent = modal.querySelector('.wallet-modal-content');
-            
+
             let walletOptionsHtml = '';
-            
+
             if (availableWallets.length === 0) {
                 walletOptionsHtml = `
                     <div class="no-wallets-notice">
@@ -4578,7 +4659,7 @@
                     </div>
                 `;
             }
-            
+
             modalContent.innerHTML = `
                 <div class="wallet-modal-header">
                     <h3>Connect Desktop Wallet</h3>
@@ -4586,39 +4667,39 @@
                 </div>
                 ${walletOptionsHtml}
             `;
-            
+
             modal.style.display = 'flex';
         }
 
         // Detect available wallet extensions
         function detectWalletExtensions() {
             const wallets = [];
-            
+
             // Check for MetaMask
             if (window.ethereum && window.ethereum.isMetaMask) {
                 wallets.push({ id: 'metamask', name: 'MetaMask', provider: window.ethereum });
             }
-            
+
             // Check for Coinbase Wallet
             if (window.ethereum && window.ethereum.isCoinbaseWallet) {
                 wallets.push({ id: 'coinbase', name: 'Coinbase Wallet', provider: window.ethereum });
             }
-            
+
             // Check for Rabby
             if (window.ethereum && window.ethereum.isRabby) {
                 wallets.push({ id: 'rabby', name: 'Rabby Wallet', provider: window.ethereum });
             }
-            
+
             // Check for Trust Wallet (desktop extension)
             if (window.ethereum && window.ethereum.isTrust) {
                 wallets.push({ id: 'trust', name: 'Trust Wallet', provider: window.ethereum });
             }
-            
+
             // Generic ethereum provider (if no specific wallet detected but ethereum exists)
             if (window.ethereum && wallets.length === 0) {
                 wallets.push({ id: 'generic', name: 'Web3 Wallet', provider: window.ethereum });
             }
-            
+
             return wallets;
         }
 
@@ -4631,12 +4712,12 @@
         async function connectDesktopWallet(walletId) {
             const wallets = detectWalletExtensions();
             const selectedWallet = wallets.find(w => w.id === walletId);
-            
+
             if (!selectedWallet) {
                 showStatus('Selected wallet not found. Please refresh and try again.', 'error');
                 return;
             }
-            
+
             await connectWithProvider(selectedWallet.provider, walletId);
         }
 
@@ -4648,7 +4729,7 @@
                 'rabby': 'https://rabby.io/',
                 'trust': 'https://trustwallet.com/browser-extension'
             };
-            
+
             if (walletLinks[walletType]) {
                 window.open(walletLinks[walletType], '_blank');
                 closeWalletModal();
@@ -4659,20 +4740,20 @@
         async function connectWithProvider(provider, walletType) {
             try {
                 closeWalletModal();
-                
+
                 if (!provider) {
                     showStatus('Wallet provider not available', 'error');
                     return;
                 }
 
                 // Request account access
-                const accounts = await provider.request({ 
-                    method: 'eth_requestAccounts' 
+                const accounts = await provider.request({
+                    method: 'eth_requestAccounts'
                 });
 
                 // Check if we're on Base network
-                const chainId = await provider.request({ 
-                    method: 'eth_chainId' 
+                const chainId = await provider.request({
+                    method: 'eth_chainId'
                 });
 
                 if (parseInt(chainId, 16) !== CONFIG.CHAIN_ID) {
@@ -4739,7 +4820,7 @@
         // Deploy contract function
         async function deployContract(event) {
             event.preventDefault();
-            
+
             if (!signer) {
                 showStatus('Please connect your wallet first', 'error');
                 return;
@@ -4767,7 +4848,7 @@
                     showStatus('Early withdrawal fee period must be between 0 and 3650 days', 'error');
                     return;
                 }
-                
+
                 // Convert days to seconds for blockchain storage
                 const lockPeriod = lockPeriodDays * 86400;
 
@@ -4822,7 +4903,7 @@
                     • Min Stake: ${minStakeRaw} (${ethers.utils.formatEther(minStake)} tokens)
                     • Name: "${contractName}"
                 `;
-                
+
                 if (!confirm(confirmationMessage)) {
                     showStatus('Deployment cancelled by user', 'warning');
                     return;
@@ -4844,7 +4925,7 @@
                 showStatus('Transaction submitted. Waiting for confirmation...', 'warning');
 
                 const receipt = await tx.wait();
-                
+
                 // Get the deployed contract address from the event
                 const deployEvent = receipt.events.find(e => e.event === 'StakingContractDeployed');
                 if (!deployEvent) {
@@ -4902,7 +4983,7 @@
 
                 const count = await factoryContract.getDeployedContractsCount();
                 console.log(`📊 Total contracts in factory: ${count.toNumber()}`);
-                
+
                 if (count.eq(0)) {
                     contractsContainer.innerHTML = '<p style="text-align: center; color: var(--secondary-text);">No contracts deployed yet.</p>';
                     return;
@@ -4913,7 +4994,7 @@
                     const info = await factoryContract.getContractInfo(i);
                     const deploymentTime = info.createdAt ? info.createdAt.toNumber() : 0;
                     const isBlacklisted = deploymentTime < BLACKLIST_BEFORE_TIMESTAMP;
-                    
+
                     // Only include contracts that are not blacklisted
                     if (!isBlacklisted) {
                         contracts.push(info);
@@ -4958,23 +5039,23 @@
             const stakingTokenInfo = await getTokenInfo(contract.stakingToken);
             const rewardTokenInfo = await getTokenInfo(contract.rewardToken);
 
-            const stakingTokenDisplay = stakingTokenInfo.symbol === 'ETH' ? 'ETH' : 
+            const stakingTokenDisplay = stakingTokenInfo.symbol === 'ETH' ? 'ETH' :
                 `${contract.stakingToken.substring(0, 6)}...${contract.stakingToken.substring(38)}`;
-            const rewardTokenDisplay = rewardTokenInfo.symbol === 'ETH' ? 'ETH' : 
+            const rewardTokenDisplay = rewardTokenInfo.symbol === 'ETH' ? 'ETH' :
                 `${contract.rewardToken.substring(0, 6)}...${contract.rewardToken.substring(38)}`;
-            
+
             // Professional date formatting (date only)
             const createdDate = formatDateOnly(contract.createdAt.toNumber());
-            
+
             // CRITICAL FIX: Check actual current owner, not just original creator
             let isOwner = false;
             let currentOwner = contract.creator; // Default fallback
-            
+
             try {
                 const stakingContract = new ethers.Contract(contract.contractAddress, STAKING_ABI, provider);
                 currentOwner = await stakingContract.owner();
                 isOwner = userAddress && currentOwner.toLowerCase() === userAddress.toLowerCase();
-                
+
                 console.log(`🔍 Ownership check for ${contract.name}:`, {
                     originalCreator: contract.creator,
                     currentOwner: currentOwner,
@@ -4986,7 +5067,7 @@
                 console.warn(`Could not get current owner for ${contract.name}, falling back to creator check:`, error.message);
                 isOwner = userAddress && contract.creator.toLowerCase() === userAddress.toLowerCase();
             }
-            
+
             // CRITICAL FIX: Get lockPeriod directly from staking contract for accuracy
             let actualLockPeriod = contract.lockPeriod;
             try {
@@ -4996,7 +5077,7 @@
             } catch (error) {
                 console.warn(`Could not get actual lockPeriod for ${contract.name}, using factory data:`, error.message);
             }
-            
+
             console.log('👤 Admin Check:', {
                 contractName: contract.name,
                 contractCreator: contract.creator,
@@ -5009,10 +5090,10 @@
             // CRITICAL: Accurate conversion from basis points to percentage
             const earlyFeePercent = (contract.earlyFee.toNumber() / 100).toFixed(2);
             const apyPercent = (contract.apy.toNumber() / 100).toFixed(2);
-            
+
             // CRITICAL: Use actual contract lockPeriod for accurate conversion from seconds to days
             const lockPeriodDays = Math.round(actualLockPeriod.toNumber() / 86400);
-            
+
             // CRITICAL: Accurate token amount display
             const minStakeFormatted = ethers.utils.formatEther(contract.minStake);
 
@@ -5022,7 +5103,7 @@
                 const stakingContract = new ethers.Contract(contract.contractAddress, STAKING_ABI, provider);
                 const totalStaked = await stakingContract.totalStaked();
                 const totalRewards = await stakingContract.totalRewards();
-                
+
                 let userStake = ethers.BigNumber.from(0);
                 let userRewards = ethers.BigNumber.from(0);
                 let userBalance = ethers.BigNumber.from(0);
@@ -5031,7 +5112,7 @@
                     try {
                         userStake = await stakingContract.getStakedAmount(userAddress);
                         userRewards = await stakingContract.getPendingRewards(userAddress);
-                        
+
                         // Get user's available balance for staking
                         if (stakingTokenInfo.symbol === 'ETH') {
                             userBalance = await provider.getBalance(userAddress);
@@ -5181,29 +5262,29 @@
                 }
 
                 const totalContractsRaw = await factoryContract.getDeployedContractsCount();
-                
+
                 // Filter out blacklisted contracts for accurate count
                 let activeContractsCount = 0;
                 let userContractsCount = 0;
                 let totalValueLocked = ethers.BigNumber.from(0);
-                
+
                 const count = totalContractsRaw.toNumber();
                 for (let i = 0; i < count; i++) {
                     try {
                         const contractInfo = await factoryContract.getContractInfo(i);
-                        
+
                         // Skip blacklisted contracts
                         if (isBlacklisted(contractInfo)) {
                             continue;
                         }
-                        
+
                         activeContractsCount++;
-                        
+
                         // Count user contracts (only active ones)
                         if (userAddress && contractInfo.creator.toLowerCase() === userAddress.toLowerCase()) {
                             userContractsCount++;
                         }
-                        
+
                         // Calculate TVL (only for active contracts)
                         try {
                             const stakingContract = new ethers.Contract(contractInfo.contractAddress, STAKING_ABI, provider);
@@ -5212,19 +5293,19 @@
                         } catch (err) {
                             console.warn(`Could not get TVL for contract ${contractInfo.contractAddress}:`, err.message);
                         }
-                        
+
                     } catch (err) {
                         console.warn(`Could not process contract ${i}:`, err.message);
                     }
                 }
-                
+
                 // Update UI with filtered counts
                 document.getElementById('totalContracts').textContent = activeContractsCount.toString();
-                
+
                 if (userAddress) {
                     document.getElementById('userContracts').textContent = userContractsCount.toString();
                 }
-                
+
                 const tvlFormatted = parseFloat(ethers.utils.formatEther(totalValueLocked)).toFixed(2);
                 document.getElementById('totalStaked').textContent = `${tvlFormatted}`;
 
@@ -5259,7 +5340,7 @@
                         stakingContract.minStake(),
                         stakingContract.totalStaked()
                     ]);
-                    
+
                     contractData = {
                         stakingToken,
                         rewardToken,
@@ -5285,7 +5366,7 @@
                 if (userAddress && signer) {
                     try {
                         const stakingContractSigner = new ethers.Contract(contractAddress, STAKING_ABI, signer);
-                        
+
                         // Get all user data in parallel for accuracy
                         const [userStakeData, userRewardsData, userTimestampData, canWithdrawData] = await Promise.all([
                             stakingContractSigner.getStakedAmount(userAddress),
@@ -5306,7 +5387,7 @@
                             const unlockTimestamp = userTimestamp.add(contractData.lockPeriod);
                             const currentTimestamp = Math.floor(Date.now() / 1000);
                             const secondsLeft = unlockTimestamp.toNumber() - currentTimestamp;
-                            
+
                             if (secondsLeft > 0) {
                                 const days = Math.floor(secondsLeft / 86400);
                                 const hours = Math.floor((secondsLeft % 86400) / 3600);
@@ -5329,7 +5410,7 @@
                 // CRITICAL: Accurate basis points to percentage conversion
                 const apyPercent = (contractData.apy.toNumber() / 100).toFixed(2);
                 const earlyFeePercent = (contractData.earlyFee.toNumber() / 100).toFixed(2);
-                
+
                 // CRITICAL: Accurate time conversion (seconds to days)
                 const lockPeriodDays = Math.round(contractData.lockPeriod.toNumber() / 86400);
 
@@ -5422,23 +5503,23 @@
                 console.error('Error opening staking modal:', error);
                 modalContent.innerHTML = `<p style="color: var(--error-color);">Error loading contract details: ${error.message}</p>`;
             }
-            
+
             // Set up auto-refresh for rewards (update every 10 seconds)
             if (rewardsRefreshTimer) {
                 clearInterval(rewardsRefreshTimer);
             }
-            
+
             rewardsRefreshTimer = setInterval(async () => {
                 try {
                     if (!userAddress || !signer) return;
-                    
+
                     const modal = document.getElementById('stakingModal');
                     if (modal && modal.style.display !== 'none') {
                         // Update modal rewards
                         const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, provider);
                         const pendingRewards = await stakingContract.getPendingRewards(userAddress);
                         const rewardsFormatted = ethers.utils.formatEther(pendingRewards);
-                        
+
                         const modalRewardsElements = modal.querySelectorAll('[data-rewards-display]:not([data-contract])');
                         modalRewardsElements.forEach(element => {
                             const currentText = element.textContent;
@@ -5447,7 +5528,7 @@
                             element.textContent = `${rewardsFormatted} ${tokenPart}`;
                         });
                     }
-                    
+
                     // Also refresh main directory rewards
                     await refreshAllRewards();
                 } catch (error) {
@@ -5458,15 +5539,15 @@
 
         // Global variable to track rewards refresh timer
         let rewardsRefreshTimer = null;
-        
+
         // Auto-refresh rewards across all displays
         async function refreshAllRewards() {
             if (!userAddress || !signer) return;
-            
+
             try {
                 // Get all contracts with rewards displays
                 const rewardsElements = document.querySelectorAll('[data-rewards-display]');
-                
+
                 for (const element of rewardsElements) {
                     const contractAddress = element.getAttribute('data-contract');
                     if (contractAddress) {
@@ -5475,7 +5556,7 @@
                             const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, provider);
                             const pendingRewards = await stakingContract.getPendingRewards(userAddress);
                             const rewardsFormatted = ethers.utils.formatEther(pendingRewards);
-                            
+
                             // Update the text content (keeping the token symbol)
                             const currentText = element.textContent;
                             const tokenSymbol = currentText.split(' ').slice(-1)[0]; // Get last word (token symbol)
@@ -5502,7 +5583,7 @@
         // Close modal
         function closeModal() {
             document.getElementById('stakingModal').style.display = 'none';
-            
+
             // Clear rewards refresh timer when modal closes
             if (rewardsRefreshTimer) {
                 clearInterval(rewardsRefreshTimer);
@@ -5541,7 +5622,7 @@
                 }
 
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, signer);
-                
+
                 // CRITICAL: Check minimum stake requirement
                 const minStake = await stakingContract.minStake();
                 if (amountWei.lt(minStake)) {
@@ -5554,7 +5635,7 @@
                 if (isEthStaking) {
                     const balance = await signer.getBalance();
                     const gasEstimate = ethers.utils.parseEther('0.001'); // Reserve for gas
-                    
+
                     if (balance.sub(gasEstimate).lt(amountWei)) {
                         const balanceFormatted = ethers.utils.formatEther(balance);
                         showStatus(`Insufficient ETH balance. You have ${balanceFormatted} ETH`, 'error');
@@ -5574,7 +5655,7 @@
                     amountInput: amountInput,
                     isEthStaking: isEthStaking
                 };
-                
+
                 // Show confirmation modal
                 document.getElementById('stakeConfirmModal').style.display = 'flex';
 
@@ -5612,30 +5693,30 @@
                 let tx;
                 if (isEthStaking) {
                     // For ETH staking, amount parameter should be 0 and ETH sent via value
-                    tx = await stakingContract.stake(0, { 
+                    tx = await stakingContract.stake(0, {
                         value: amountWei,
                         gasLimit: 300000 // Set reasonable gas limit
                     });
                 } else {
                     // For token staking, user must approve tokens first
                     console.log('Token staking detected. Checking allowance...');
-                    
+
                     // Get staking token address
                     const stakingTokenAddress = await stakingContract.stakingToken();
-                    
+
                     const tokenContract = new ethers.Contract(stakingTokenAddress, [
                         "function approve(address spender, uint256 amount) external returns (bool)",
                         "function allowance(address owner, address spender) external view returns (uint256)"
                     ], signer);
-                    
+
                     // Check current allowance
                     const currentAllowance = await tokenContract.allowance(userAddress, contractAddress);
                     console.log('Current staking allowance:', ethers.utils.formatEther(currentAllowance));
-                    
+
                     if (currentAllowance.lt(amountWei)) {
                         console.log('Insufficient allowance for staking, requesting approval...');
                         showStatus('Approving tokens for staking... Please confirm the approval transaction first.', 'warning');
-                        
+
                         const approveTx = await tokenContract.approve(contractAddress, amountWei);
                         console.log('Staking approval transaction submitted:', approveTx.hash);
                         showStatus('Waiting for staking approval confirmation...', 'warning');
@@ -5643,7 +5724,7 @@
                         console.log('Staking approval confirmed');
                         showStatus('Approval confirmed. Now staking tokens...', 'warning');
                     }
-                    
+
                     console.log('Sending token staking transaction:', { amount: amountWei.toString() });
                     tx = await stakingContract.stake(amountWei, {
                         gasLimit: 300000
@@ -5653,7 +5734,7 @@
                 closeAdminModal('stakeConfirmModal');
                 showStatus(`Staking transaction submitted: ${tx.hash}`, 'warning');
                 const receipt = await tx.wait();
-                
+
                 if (receipt.status === 1) {
                     showStatus(`Successfully staked ${amountInput} ${isEthStaking ? 'ETH' : 'tokens'}!`, 'success');
                 } else {
@@ -5720,7 +5801,7 @@
                 }
 
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, signer);
-                
+
                 // CRITICAL: Check user's staked balance
                 const userStakedAmount = await stakingContract.getStakedAmount(userAddress);
                 if (amountWei.gt(userStakedAmount)) {
@@ -5737,16 +5818,16 @@
                 // CRITICAL: Check withdrawal conditions and calculate fees
                 const canWithdrawFree = await stakingContract.canWithdrawWithoutFee(userAddress);
                 const earlyFee = await stakingContract.earlyFee();
-                
+
                 let feeAmount = ethers.BigNumber.from(0);
                 let warningMessage = '';
-                
+
                 if (!canWithdrawFree) {
                     // Calculate exact fee in Wei
                     feeAmount = amountWei.mul(earlyFee).div(10000); // earlyFee is in basis points
                     const feeFormatted = ethers.utils.formatEther(feeAmount);
                     const feePercent = (earlyFee.toNumber() / 100).toFixed(2);
-                    
+
                     warningMessage = `
                         ⚠️ EARLY WITHDRAWAL WARNING:
                         • Withdrawal amount: ${amountInput}
@@ -5766,10 +5847,10 @@
                 document.getElementById('confirmWithdrawAmount').innerHTML = `<strong style="color: var(--console-green);">${amountInput}</strong>`;
                 document.getElementById('confirmStakedBalance').innerHTML = `<strong>${ethers.utils.formatEther(userStakedAmount)}</strong>`;
                 document.getElementById('confirmUnlockDate').innerHTML = `<strong>${unlockDate.toLocaleString()}</strong>`;
-                document.getElementById('confirmEarlyWithdraw').innerHTML = canWithdrawFree ? 
-                    `<strong style="color: var(--console-green);">No</strong>` : 
+                document.getElementById('confirmEarlyWithdraw').innerHTML = canWithdrawFree ?
+                    `<strong style="color: var(--console-green);">No</strong>` :
                     `<strong style="color: var(--console-red);">Yes</strong>`;
-                document.getElementById('confirmWithdrawWarning').innerHTML = warningMessage ? 
+                document.getElementById('confirmWithdrawWarning').innerHTML = warningMessage ?
                     `<div style="color: var(--console-red); font-weight: bold; padding: 0.5rem; border: 1px solid var(--console-red); border-radius: 4px;">${warningMessage}</div>` : '';
 
                 // Store withdrawal details for execution
@@ -5778,7 +5859,7 @@
                     amountWei: amountWei,
                     amountInput: amountInput
                 };
-                
+
                 // Show confirmation modal
                 document.getElementById('withdrawConfirmModal').style.display = 'flex';
 
@@ -5806,10 +5887,10 @@
                 closeAdminModal('withdrawConfirmModal');
                 showStatus(`Withdrawal transaction submitted: ${tx.hash}`, 'warning');
                 const receipt = await tx.wait();
-                
+
                 if (receipt.status === 1) {
                     showStatus(`Successfully withdrew ${amountInput}!`, 'success');
-                    
+
                     // Clear input and refresh modal
                     document.getElementById('stakeAmount').value = '';
                     setTimeout(() => {
@@ -5848,7 +5929,7 @@
 
             try {
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, signer);
-                
+
                 // CRITICAL: Check if user has any rewards to claim
                 const pendingRewards = await stakingContract.getPendingRewards(userAddress);
                 if (pendingRewards.eq(0)) {
@@ -5866,7 +5947,7 @@
 
                 // Store contract address for execution
                 window.pendingClaimContract = contractAddress;
-                
+
                 // Show confirmation modal
                 document.getElementById('claimConfirmModal').style.display = 'flex';
 
@@ -5896,7 +5977,7 @@
 
                 if (receipt.status === 1) {
                     showStatus('Rewards claimed successfully!', 'success');
-                    
+
                     // Refresh the modal if it's still open
                     setTimeout(() => {
                         const openModal = document.getElementById('stakingModal');
@@ -5946,7 +6027,7 @@
         async function openDepositRewardsModal(contractAddress, rewardTokenSymbol) {
             console.log('🔧 openDepositRewardsModal called with:', { contractAddress, rewardTokenSymbol });
             console.log('🔧 Signer available:', !!signer);
-            
+
             if (!signer) {
                 console.error('❌ No signer available');
                 showStatus('Please connect your wallet first', 'error');
@@ -5987,14 +6068,14 @@
                 const tokenElement = document.getElementById('depositRewardToken');
                 const balanceElement = document.getElementById('depositUserBalance');
                 const contractBalanceElement = document.getElementById('depositContractBalance');
-                
+
                 console.log('🔧 Modal elements found:', {
                     contract: !!contractElement,
                     token: !!tokenElement,
                     balance: !!balanceElement,
                     contractBalance: !!contractBalanceElement
                 });
-                
+
                 if (contractElement) contractElement.textContent = contractAddress;
                 if (tokenElement) tokenElement.textContent = `${rewardTokenSymbol} (${isEthReward ? 'ETH' : 'Token'})`;
                 if (balanceElement) balanceElement.textContent = `${ethers.utils.formatEther(userBalance)} ${rewardTokenSymbol}`;
@@ -6044,7 +6125,7 @@
 
                 let tx;
                 if (isEthReward) {
-                    tx = await stakingContract.depositRewards(0, { 
+                    tx = await stakingContract.depositRewards(0, {
                         value: amountWei,
                         gasLimit: 300000
                     });
@@ -6070,7 +6151,7 @@
                 showStatus('Depositing rewards...', 'warning');
                 await tx.wait();
                 showStatus(`Successfully deposited ${amount} ${rewardTokenSymbol} as rewards!`, 'success');
-                
+
                 setTimeout(() => loadContractsDirectory(), 2000);
 
             } catch (error) {
@@ -6083,7 +6164,7 @@
         async function openWithdrawFeesModal(contractAddress) {
             console.log('🔧 openWithdrawFeesModal called with:', { contractAddress });
             console.log('🔧 Signer available:', !!signer);
-            
+
             if (!signer) {
                 console.error('❌ No signer available');
                 showStatus('Please connect your wallet first', 'error');
@@ -6093,7 +6174,7 @@
             try {
                 console.log('🔧 Creating staking contract...');
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, signer);
-                
+
                 // Get contract details
                 const [
                     stakingToken,
@@ -6151,33 +6232,33 @@
                 if (isStakingEth && isRewardEth) {
                     // Both staking and rewards are ETH - subtract reserved amounts
                     const totalReservedEth = totalStaked.add(totalRewards);
-                    withdrawableEth = contractEthBalance.gt(totalReservedEth) ? 
+                    withdrawableEth = contractEthBalance.gt(totalReservedEth) ?
                         contractEthBalance.sub(totalReservedEth) : ethers.BigNumber.from(0);
                 } else if (isStakingEth && !isRewardEth) {
                     // Staking is ETH, rewards are tokens
-                    withdrawableEth = contractEthBalance.gt(totalStaked) ? 
+                    withdrawableEth = contractEthBalance.gt(totalStaked) ?
                         contractEthBalance.sub(totalStaked) : ethers.BigNumber.from(0);
-                    withdrawableRewardTokens = rewardTokenBalance.gt(totalRewards) ? 
+                    withdrawableRewardTokens = rewardTokenBalance.gt(totalRewards) ?
                         rewardTokenBalance.sub(totalRewards) : ethers.BigNumber.from(0);
                 } else if (!isStakingEth && isRewardEth) {
                     // Staking is tokens, rewards are ETH
-                    withdrawableStakingTokens = stakingTokenBalance.gt(totalStaked) ? 
+                    withdrawableStakingTokens = stakingTokenBalance.gt(totalStaked) ?
                         stakingTokenBalance.sub(totalStaked) : ethers.BigNumber.from(0);
-                    withdrawableEth = contractEthBalance.gt(totalRewards) ? 
+                    withdrawableEth = contractEthBalance.gt(totalRewards) ?
                         contractEthBalance.sub(totalRewards) : ethers.BigNumber.from(0);
                 } else {
                     // Both are tokens - check if they're the same token
                     if (stakingToken.toLowerCase() === rewardToken.toLowerCase()) {
                         // Same token for staking and rewards - only calculate once
                         const totalReservedTokens = totalStaked.add(totalRewards);
-                        withdrawableStakingTokens = stakingTokenBalance.gt(totalReservedTokens) ? 
+                        withdrawableStakingTokens = stakingTokenBalance.gt(totalReservedTokens) ?
                             stakingTokenBalance.sub(totalReservedTokens) : ethers.BigNumber.from(0);
                         withdrawableRewardTokens = ethers.BigNumber.from(0); // Don't double count
                     } else {
                         // Different tokens - calculate separately  
-                        withdrawableStakingTokens = stakingTokenBalance.gt(totalStaked) ? 
+                        withdrawableStakingTokens = stakingTokenBalance.gt(totalStaked) ?
                             stakingTokenBalance.sub(totalStaked) : ethers.BigNumber.from(0);
-                        withdrawableRewardTokens = rewardTokenBalance.gt(totalRewards) ? 
+                        withdrawableRewardTokens = rewardTokenBalance.gt(totalRewards) ?
                             rewardTokenBalance.sub(totalRewards) : ethers.BigNumber.from(0);
                     }
                     withdrawableEth = contractEthBalance; // Any ETH in contract is withdrawable
@@ -6211,10 +6292,10 @@
 
                 // Populate modal with contract address
                 document.getElementById('feesContractAddress').textContent = `${contractAddress.slice(0, 6)}...${contractAddress.slice(-4)}`;
-                
+
                 // Show available withdrawable amounts
                 let availableWithdrawals = [];
-                
+
                 if (withdrawableEth.gt(0)) {
                     availableWithdrawals.push(`${ethers.utils.formatEther(withdrawableEth)} ETH`);
                 }
@@ -6225,10 +6306,10 @@
                     availableWithdrawals.push(`${ethers.utils.formatEther(withdrawableRewardTokens)} ${rewardTokenSymbol}`);
                 }
 
-                document.getElementById('availableWithdrawals').innerHTML = 
-                    availableWithdrawals.length > 0 ? 
-                    availableWithdrawals.map(amount => `<div class="mobile-amount">• ${amount}</div>`).join('') :
-                    '<div style="color: var(--console-red);">No withdrawable fees available</div>';
+                document.getElementById('availableWithdrawals').innerHTML =
+                    availableWithdrawals.length > 0 ?
+                        availableWithdrawals.map(amount => `<div class="mobile-amount">• ${amount}</div>`).join('') :
+                        '<div style="color: var(--console-red);">No withdrawable fees available</div>';
 
                 // Show modal
                 console.log('🔧 Showing withdraw fees modal...');
@@ -6329,7 +6410,7 @@
         async function openTransferOwnershipModal(contractAddress) {
             console.log('🔧 openTransferOwnershipModal called with:', { contractAddress });
             console.log('🔧 Signer available:', !!signer);
-            
+
             if (!signer) {
                 console.error('❌ No signer available');
                 showStatus('Please connect your wallet first', 'error');
@@ -6415,7 +6496,7 @@
         // Execute emergency withdraw
         async function confirmEmergencyWithdraw() {
             const contractAddress = document.getElementById('emergencyContractAddress').textContent;
-            
+
             try {
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, signer);
                 const tx = await stakingContract.enableEmergencyWithdraw({
@@ -6440,7 +6521,7 @@
         // Deposit rewards into a staking contract
         async function depositRewards(contractAddress, rewardTokenSymbol) {
             console.log('🔧 Admin Control: depositRewards called', { contractAddress, rewardTokenSymbol });
-            
+
             if (!signer) {
                 showStatus('Please connect your wallet first', 'error');
                 return;
@@ -6462,7 +6543,7 @@
 
                 // Get user balance and contract info for confirmation
                 let userBalance, contractRewardBalance, totalRewardsDistributed;
-                
+
                 try {
                     if (isEthReward) {
                         // ETH balances
@@ -6474,7 +6555,7 @@
                         userBalance = await tokenContract.balanceOf(userAddress);
                         contractRewardBalance = await tokenContract.balanceOf(contractAddress);
                     }
-                    
+
                     totalRewardsDistributed = await stakingContract.totalRewards();
 
                     const userBalanceFormatted = ethers.utils.formatEther(userBalance);
@@ -6502,7 +6583,7 @@ CONFIRM REWARD DEPOSIT:
 ═══════════════════════════════════
 
 Deposit these rewards?`;
-                    
+
                     if (!confirm(confirmMessage)) {
                         showStatus('Reward deposit cancelled by user', 'warning');
                         return;
@@ -6517,7 +6598,7 @@ DEPOSIT REWARDS:
 • Type: ${isEthReward ? 'ETH Rewards' : 'Token Rewards'}
 
 Deposit these rewards?`;
-                    
+
                     if (!confirm(simpleConfirm)) {
                         showStatus('Reward deposit cancelled by user', 'warning');
                         return;
@@ -6528,27 +6609,27 @@ Deposit these rewards?`;
                 if (isEthReward) {
                     // For ETH rewards, amount parameter should be 0 and ETH sent via value
                     console.log('Sending ETH reward deposit:', { value: amountWei.toString() });
-                    tx = await stakingContract.depositRewards(0, { 
+                    tx = await stakingContract.depositRewards(0, {
                         value: amountWei,
                         gasLimit: 300000
                     });
                 } else {
                     // For token rewards, user must approve tokens first
                     console.log('Token reward deposit detected. Checking allowance...');
-                    
+
                     const tokenContract = new ethers.Contract(rewardToken, [
                         "function approve(address spender, uint256 amount) external returns (bool)",
                         "function allowance(address owner, address spender) external view returns (uint256)"
                     ], signer);
-                    
+
                     // Check current allowance
                     const currentAllowance = await tokenContract.allowance(userAddress, contractAddress);
                     console.log('Current allowance:', ethers.utils.formatEther(currentAllowance));
-                    
+
                     if (currentAllowance.lt(amountWei)) {
                         console.log('Insufficient allowance, requesting approval...');
                         showStatus('Approving tokens... Please confirm the approval transaction first.', 'warning');
-                        
+
                         const approveTx = await tokenContract.approve(contractAddress, amountWei);
                         console.log('Approval transaction submitted:', approveTx.hash);
                         showStatus('Waiting for approval confirmation...', 'warning');
@@ -6556,7 +6637,7 @@ Deposit these rewards?`;
                         console.log('Approval confirmed');
                         showStatus('Approval confirmed. Now depositing rewards...', 'warning');
                     }
-                    
+
                     console.log('Sending token reward deposit:', { amount: amountWei.toString() });
                     tx = await stakingContract.depositRewards(amountWei, {
                         gasLimit: 300000
@@ -6567,9 +6648,9 @@ Deposit these rewards?`;
                 showStatus('Depositing rewards...', 'warning');
                 const receipt = await tx.wait();
                 console.log('Transaction confirmed:', receipt);
-                
+
                 showStatus(`Successfully deposited ${amount} ${rewardTokenSymbol} as rewards!`, 'success');
-                
+
                 // Refresh contracts directory
                 setTimeout(() => loadContractsDirectory(), 2000);
 
@@ -6582,7 +6663,7 @@ Deposit these rewards?`;
         // Enable emergency withdraw
         async function enableEmergencyWithdraw(contractAddress) {
             console.log('🔧 Admin Control: enableEmergencyWithdraw called', { contractAddress });
-            
+
             if (!signer) {
                 showStatus('Please connect your wallet first', 'error');
                 return;
@@ -6595,7 +6676,7 @@ Deposit these rewards?`;
                 
                 Continue?
             `;
-            
+
             if (!confirm(confirmMessage)) {
                 return;
             }
@@ -6619,7 +6700,7 @@ Deposit these rewards?`;
         // Withdraw excess tokens
         async function withdrawExcess(contractAddress) {
             console.log('🔧 Admin Control: withdrawExcess called', { contractAddress });
-            
+
             if (!signer) {
                 showStatus('Please connect your wallet first', 'error');
                 return;
@@ -6631,33 +6712,33 @@ Deposit these rewards?`;
                 const rewardToken = await stakingContract.rewardToken();
                 const totalStaked = await stakingContract.totalStaked();
                 const totalRewards = await stakingContract.totalRewards();
-                
+
                 // Get contract balances
                 const contractEthBalance = await provider.getBalance(contractAddress);
-                
+
                 let stakingTokenBalance = ethers.BigNumber.from(0);
                 let rewardTokenBalance = ethers.BigNumber.from(0);
-                
+
                 const isStakingEth = stakingToken === ethers.constants.AddressZero;
                 const isRewardEth = rewardToken === ethers.constants.AddressZero;
-                
+
                 if (!isStakingEth) {
                     const stakingTokenContract = new ethers.Contract(stakingToken, ERC20_ABI, provider);
                     stakingTokenBalance = await stakingTokenContract.balanceOf(contractAddress);
                 }
-                
+
                 if (!isRewardEth) {
                     const rewardTokenContract = new ethers.Contract(rewardToken, ERC20_ABI, provider);
                     rewardTokenBalance = await rewardTokenContract.balanceOf(contractAddress);
                 }
 
                 // Calculate excess amounts (what can be withdrawn)
-                const stakingExcess = isStakingEth ? 
-                    contractEthBalance.sub(totalStaked) : 
+                const stakingExcess = isStakingEth ?
+                    contractEthBalance.sub(totalStaked) :
                     stakingTokenBalance.sub(totalStaked);
-                    
-                const rewardExcess = isRewardEth ? 
-                    contractEthBalance.sub(totalRewards) : 
+
+                const rewardExcess = isRewardEth ?
+                    contractEthBalance.sub(totalRewards) :
                     rewardTokenBalance.sub(totalRewards);
 
                 const balanceInfo = `
@@ -6735,7 +6816,7 @@ Enter amount to withdraw (max: ${maxWithdrawableFormatted}):`;
                 }
 
                 const amountWei = ethers.utils.parseEther(amount);
-                
+
                 // Check if amount exceeds available
                 if (amountWei.gt(maxWithdrawable)) {
                     showStatus(`Amount exceeds available excess. Max: ${maxWithdrawableFormatted} ${tokenSymbol}`, 'error');
@@ -6756,7 +6837,7 @@ CONFIRM EXCESS WITHDRAWAL:
 
 Continue with withdrawal?
                 `;
-                
+
                 if (!confirm(confirmMessage)) {
                     showStatus('Withdrawal cancelled by user', 'warning');
                     return;
@@ -6855,7 +6936,7 @@ Are you absolutely sure you want to proceed?`;
                 await tx.wait();
 
                 showStatus(`Ownership successfully transferred to ${newOwnerAddress}!`, 'success');
-                
+
                 // Refresh the contracts to update admin controls visibility
                 setTimeout(() => {
                     refreshDirectory();
@@ -6907,7 +6988,7 @@ pragma solidity 0.8.19;
         function showStatus(message, type = 'info') {
             const statusElement = document.getElementById('deployStatus');
             statusElement.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
-            
+
             // Auto-hide success messages
             if (type === 'success') {
                 setTimeout(() => {
@@ -6917,7 +6998,7 @@ pragma solidity 0.8.19;
         }
 
         // Close modal when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('stakingModal');
             if (event.target === modal) {
                 closeModal();
@@ -6942,7 +7023,7 @@ pragma solidity 0.8.19;
         window.executeClaimRewards = executeClaimRewards;
         window.executeStake = executeStake;
         window.copyToClipboard = copyToClipboard;
-        
+
         // New modal-based admin functions (Coinbase Wallet compatible)
         window.openDepositRewardsModal = openDepositRewardsModal;
         window.openWithdrawFeesModal = openWithdrawFeesModal;
@@ -6950,28 +7031,28 @@ pragma solidity 0.8.19;
         window.openEmergencyWithdrawModal = openEmergencyWithdrawModal;
         window.closeAdminModal = closeAdminModal;
         window.confirmEmergencyWithdraw = confirmEmergencyWithdraw;
-        
+
         // Legacy admin functions (still available for compatibility)
         window.depositRewards = depositRewards;
         window.enableEmergencyWithdraw = enableEmergencyWithdraw;
         window.withdrawExcess = withdrawExcess;
         window.transferOwnership = transferOwnership;
-        
+
         // Global variables for filtering
         let allContracts = [];
         let filteredContracts = [];
-        
+
         // Search and Filter Functions
         async function searchContracts() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            
+
             if (searchTerm === '') {
                 // Show all contracts if search is empty
                 displayContracts(allContracts);
                 updateResultsCount(allContracts.length);
                 return;
             }
-            
+
             // Filter contracts based on search term
             const filteredContracts = allContracts.filter(contract => {
                 const contractData = contract.searchData;
@@ -6981,7 +7062,7 @@ pragma solidity 0.8.19;
                     contractData.contractAddress.includes(searchTerm) ||
                     contractData.apy.toString().includes(searchTerm);
             });
-            
+
             displayContracts(filteredContracts);
             updateResultsCount(filteredContracts.length);
         }
@@ -7003,13 +7084,13 @@ pragma solidity 0.8.19;
         }
 
         function updateResultsCount(count) {
-            document.getElementById('resultsCount').textContent = 
+            document.getElementById('resultsCount').textContent =
                 `Showing ${count} of ${allContracts.length} contracts`;
         }
 
         async function renderContracts(contractsToRender) {
             const contractsContainer = document.getElementById('contractsContainer');
-            
+
             if (contractsToRender.length === 0) {
                 contractsContainer.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--secondary-text);">
@@ -7023,17 +7104,17 @@ pragma solidity 0.8.19;
                 `;
                 return;
             }
-            
+
             let html = '<div class="contracts-grid">';
             for (const contractData of contractsToRender) {
                 const cardHtml = await createContractCard(contractData.contract || contractData);
                 html += cardHtml;
             }
             html += '</div>';
-            
+
             contractsContainer.innerHTML = html;
         }
-        
+
         function clearFilters() {
             document.getElementById('searchInput').value = '';
             document.getElementById('sortFilter').value = 'newest';
@@ -7041,11 +7122,11 @@ pragma solidity 0.8.19;
             document.getElementById('apyFilter').value = 'all';
             filterContracts();
         }
-        
+
         function refreshDirectory() {
             loadContractsDirectory();
         }
-        
+
         // Enhanced contract loading with search data
         async function loadContractsDirectoryWithSearch() {
             try {
@@ -7060,7 +7141,7 @@ pragma solidity 0.8.19;
 
                 const count = await factoryContract.getDeployedContractsCount();
                 console.log(`📊 Total contracts in factory: ${count.toNumber()}`);
-                
+
                 if (count.eq(0)) {
                     contractsContainer.innerHTML = '<p style="text-align: center; color: var(--secondary-text);">No contracts deployed yet.</p>';
                     return;
@@ -7071,13 +7152,13 @@ pragma solidity 0.8.19;
                     const info = await factoryContract.getContractInfo(i);
                     const deploymentTime = info.createdAt ? info.createdAt.toNumber() : 0;
                     const isBlacklisted = deploymentTime < BLACKLIST_BEFORE_TIMESTAMP;
-                    
+
                     // Only include contracts that are not blacklisted
                     if (!isBlacklisted) {
                         // Get additional data for search
                         const stakingTokenInfo = await getTokenInfo(info.stakingToken);
                         const rewardTokenInfo = await getTokenInfo(info.rewardToken);
-                        
+
                         // Get TVL
                         let tvl = 0;
                         try {
@@ -7087,7 +7168,7 @@ pragma solidity 0.8.19;
                         } catch (err) {
                             console.warn(`Could not get TVL for ${info.name}:`, err.message);
                         }
-                        
+
                         const contractData = {
                             contract: info,
                             searchData: {
@@ -7102,7 +7183,7 @@ pragma solidity 0.8.19;
                                 isEthReward: info.rewardToken === ethers.constants.AddressZero
                             }
                         };
-                        
+
                         allContracts.push(contractData);
                         console.log(`✅ Contract ${i} (${info.name}) added to display`);
                     }
@@ -7130,10 +7211,10 @@ pragma solidity 0.8.19;
                 }
             }
         }
-        
+
         // Update the original function to use the new search version
         window.loadContractsDirectory = loadContractsDirectoryWithSearch;
-        
+
         // Time Period Verification Functions
         async function verifyTimePeriods(contractAddress) {
             if (!provider) {
@@ -7143,52 +7224,52 @@ pragma solidity 0.8.19;
 
             try {
                 console.log('🕐 Verifying time periods for contract:', contractAddress);
-                
+
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, provider);
-                
+
                 // Get contract parameters
                 const lockPeriod = await stakingContract.lockPeriod();
                 const earlyFee = await stakingContract.earlyFee();
-                
+
                 console.log('📊 Contract Time Settings:');
                 console.log(`  Lock Period (seconds): ${lockPeriod.toString()}`);
                 console.log(`  Lock Period (days): ${lockPeriod.toNumber() / 86400}`);
                 console.log(`  Early Fee (%): ${earlyFee.toNumber() / 100}`);
-                
+
                 // Calculate time conversions
                 const lockPeriodDays = lockPeriod.toNumber() / 86400;
                 const lockPeriodHours = lockPeriod.toNumber() / 3600;
                 const lockPeriodMinutes = lockPeriod.toNumber() / 60;
-                
+
                 console.log('🧮 Time Conversions:');
                 console.log(`  ${lockPeriod.toNumber()} seconds`);
                 console.log(`  ${lockPeriodMinutes} minutes`);
                 console.log(`  ${lockPeriodHours} hours`);
                 console.log(`  ${lockPeriodDays} days`);
-                
+
                 // Test if user has staked
                 if (signer) {
                     const userAddress = await signer.getAddress();
                     const userStake = await stakingContract.userStakes(userAddress);
                     const stakeTimestamp = await stakingContract.getStakeTimestamp(userAddress);
-                    
+
                     if (userStake.gt(0) && stakeTimestamp.gt(0)) {
                         const currentTime = Math.floor(Date.now() / 1000);
                         const stakeTime = stakeTimestamp.toNumber();
                         const timePassed = currentTime - stakeTime;
                         const unlockTime = stakeTime + lockPeriod.toNumber();
                         const timeRemaining = unlockTime - currentTime;
-                        
+
                         console.log('⏰ User Stake Timing:');
                         console.log(`  Stake Time: ${new Date(stakeTime * 1000).toLocaleString()}`);
                         console.log(`  Current Time: ${new Date(currentTime * 1000).toLocaleString()}`);
                         console.log(`  Unlock Time: ${new Date(unlockTime * 1000).toLocaleString()}`);
                         console.log(`  Time Passed: ${Math.floor(timePassed / 86400)} days, ${Math.floor((timePassed % 86400) / 3600)} hours`);
                         console.log(`  Time Remaining: ${Math.floor(timeRemaining / 86400)} days, ${Math.floor((timeRemaining % 86400) / 3600)} hours`);
-                        
+
                         const canWithdrawWithoutFee = await stakingContract.canWithdrawWithoutFee(userAddress);
                         console.log(`  Can Withdraw Without Fee: ${canWithdrawWithoutFee}`);
-                        
+
                         return {
                             lockPeriodSeconds: lockPeriod.toNumber(),
                             lockPeriodDays: lockPeriodDays,
@@ -7217,33 +7298,33 @@ pragma solidity 0.8.19;
                         walletNotConnected: true
                     };
                 }
-                
+
             } catch (error) {
                 console.error('❌ Error verifying time periods:', error);
                 showStatus('Error verifying time periods: ' + error.message, 'error');
                 return null;
             }
         }
-        
+
         // Test time period accuracy with a simple 1-day contract
         async function testOneDayPeriod() {
             console.log('🧪 Testing 1-day time period accuracy...');
-            
+
             // 1 day = 86400 seconds
             const oneDayInSeconds = 86400;
             console.log(`1 day should equal ${oneDayInSeconds} seconds`);
-            
+
             // Test the conversion used in contract creation
             const testDays = 1;
             const convertedSeconds = testDays * 86400;
             console.log(`Frontend conversion: ${testDays} day(s) = ${convertedSeconds} seconds`);
-            
+
             // Test reverse conversion
             const backToDays = convertedSeconds / 86400;
             console.log(`Reverse conversion: ${convertedSeconds} seconds = ${backToDays} days`);
-            
+
             console.log('✅ Time conversion is mathematically correct');
-            
+
             return {
                 inputDays: testDays,
                 calculatedSeconds: convertedSeconds,
@@ -7251,7 +7332,7 @@ pragma solidity 0.8.19;
                 isAccurate: backToDays === testDays
             };
         }
-        
+
         // Helper function to verify contract time periods from input
         async function verifyContractTimePeriods() {
             const contractAddress = document.getElementById('contractAddressToVerify')?.value?.trim();
@@ -7259,20 +7340,20 @@ pragma solidity 0.8.19;
                 showStatus('Please enter a contract address to verify', 'warning');
                 return;
             }
-            
+
             if (!ethers.utils.isAddress(contractAddress)) {
                 showStatus('Invalid contract address', 'error');
                 return;
             }
-            
+
             console.log('🔍 Verifying time periods for contract:', contractAddress);
             const result = await verifyTimePeriods(contractAddress);
-            
+
             if (result) {
                 let message = `Contract Time Verification Complete!\n\n`;
                 message += `Lock Period: ${result.lockPeriodDays} days (${result.lockPeriodSeconds} seconds)\n`;
                 message += `Early Fee: ${result.earlyFeePercent}%\n\n`;
-                
+
                 if (result.hasStake === false) {
                     message += `You have no stake in this contract.`;
                 } else if (result.walletNotConnected) {
@@ -7283,12 +7364,12 @@ pragma solidity 0.8.19;
                     message += `- Time remaining: ${Math.floor(result.timeRemainingSeconds / 86400)} days\n`;
                     message += `- Can withdraw without fee: ${result.canWithdrawWithoutFee ? 'YES ✅' : 'NO ❌'}`;
                 }
-                
+
                 showStatus('Time verification complete - check console for details', 'success');
                 alert(message);
             }
         }
-        
+
         // Verify APY reward calculations
         async function verifyAPYCalculation(contractAddress, userAddress = null) {
             if (!provider) {
@@ -7298,64 +7379,64 @@ pragma solidity 0.8.19;
 
             try {
                 console.log('💰 Verifying APY calculations for contract:', contractAddress);
-                
+
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, provider);
-                
+
                 // Get contract APY
                 const contractAPY = await stakingContract.apy();
                 const apyPercent = contractAPY.toNumber() / 100; // Convert from basis points
-                
+
                 console.log('📊 Contract APY Settings:');
                 console.log(`  APY (basis points): ${contractAPY.toString()}`);
                 console.log(`  APY (percentage): ${apyPercent}%`);
-                
+
                 // Calculate expected daily rate
                 const dailyRate = apyPercent / 365 / 100; // APY to daily rate
                 const hourlyRate = dailyRate / 24;
-                
+
                 console.log('⏰ Time-based Rates:');
                 console.log(`  Daily Rate: ${(dailyRate * 100).toFixed(8)}% per day`);
                 console.log(`  Hourly Rate: ${(hourlyRate * 100).toFixed(10)}% per hour`);
-                
+
                 // If user address provided or wallet connected, get user data
                 const targetAddress = userAddress || (signer ? await signer.getAddress() : null);
-                
+
                 if (targetAddress) {
                     const userStake = await stakingContract.userStakes(targetAddress);
                     const stakeTimestamp = await stakingContract.getStakeTimestamp(targetAddress);
                     const pendingRewards = await stakingContract.getPendingRewards(targetAddress);
-                    
+
                     if (userStake.gt(0) && stakeTimestamp.gt(0)) {
                         const stakeAmount = parseFloat(ethers.utils.formatEther(userStake));
                         const rewardAmount = parseFloat(ethers.utils.formatEther(pendingRewards));
-                        
+
                         const currentTime = Math.floor(Date.now() / 1000);
                         const stakingTime = stakeTimestamp.toNumber();
                         const timeStaked = currentTime - stakingTime;
-                        
+
                         const daysStaked = timeStaked / 86400;
                         const hoursStaked = timeStaked / 3600;
-                        
+
                         // Expected rewards calculations
                         const expectedDailyReward = stakeAmount * dailyRate;
                         const expectedRewardForTime = stakeAmount * dailyRate * daysStaked;
-                        
+
                         console.log('👤 User Stake Analysis:');
                         console.log(`  Staked Amount: ${stakeAmount} tokens`);
                         console.log(`  Staking Time: ${daysStaked.toFixed(4)} days (${hoursStaked.toFixed(2)} hours)`);
                         console.log(`  Actual Rewards: ${rewardAmount} tokens`);
                         console.log(`  Expected Daily Reward: ${expectedDailyReward.toFixed(8)} tokens`);
                         console.log(`  Expected Reward for Time Staked: ${expectedRewardForTime.toFixed(8)} tokens`);
-                        
+
                         const accuracy = (rewardAmount / expectedRewardForTime) * 100;
                         console.log(`  Accuracy: ${accuracy.toFixed(2)}%`);
-                        
+
                         // Detailed breakdown
                         console.log('🔍 Detailed Breakdown:');
                         console.log(`  Formula: StakeAmount × DailyRate × DaysStaked`);
                         console.log(`  Calculation: ${stakeAmount} × ${dailyRate.toFixed(8)} × ${daysStaked.toFixed(4)}`);
                         console.log(`  Result: ${expectedRewardForTime.toFixed(8)} tokens expected`);
-                        
+
                         return {
                             contractAPY: apyPercent,
                             dailyRate: dailyRate,
@@ -7382,14 +7463,14 @@ pragma solidity 0.8.19;
                         walletNotConnected: true
                     };
                 }
-                
+
             } catch (error) {
                 console.error('❌ Error verifying APY calculation:', error);
                 showStatus('Error verifying APY: ' + error.message, 'error');
                 return null;
             }
         }
-        
+
         // COMPREHENSIVE TIME FRAME VERIFICATION - 100% Accuracy Test
         async function comprehensiveTimeTest(contractAddress) {
             if (!provider || !signer) {
@@ -7400,45 +7481,45 @@ pragma solidity 0.8.19;
             try {
                 console.log('🔬 COMPREHENSIVE TIME FRAME TEST');
                 console.log('='.repeat(50));
-                
+
                 const stakingContract = new ethers.Contract(contractAddress, STAKING_ABI, provider);
                 const userAddress = await signer.getAddress();
-                
+
                 // Get contract time settings
                 const lockPeriod = await stakingContract.lockPeriod();
                 const lockPeriodDays = lockPeriod.toNumber() / 86400;
-                
+
                 console.log('📊 CONTRACT TIME SETTINGS:');
                 console.log(`  Lock Period: ${lockPeriod.toString()} seconds`);
                 console.log(`  Lock Period: ${lockPeriodDays} days`);
                 console.log(`  Lock Period: ${lockPeriod.toNumber() / 3600} hours`);
                 console.log(`  Lock Period: ${lockPeriod.toNumber() / 60} minutes`);
-                
+
                 // Check if user has a stake
                 const userStake = await stakingContract.userStakes(userAddress);
                 const stakeTimestamp = await stakingContract.getStakeTimestamp(userAddress);
-                
+
                 if (userStake.eq(0) || stakeTimestamp.eq(0)) {
                     console.log('❌ No stake found for verification');
                     return { error: 'No stake found' };
                 }
-                
+
                 // Get current blockchain time vs JavaScript time
                 const currentBlock = await provider.getBlockNumber();
                 const blockInfo = await provider.getBlock(currentBlock);
                 const blockTimestamp = blockInfo.timestamp;
                 const jsTimestamp = Math.floor(Date.now() / 1000);
-                
+
                 console.log('⏰ TIMESTAMP COMPARISON:');
                 console.log(`  Blockchain Time: ${blockTimestamp} (${new Date(blockTimestamp * 1000).toLocaleString()})`);
                 console.log(`  JavaScript Time: ${jsTimestamp} (${new Date(jsTimestamp * 1000).toLocaleString()})`);
                 console.log(`  Difference: ${Math.abs(blockTimestamp - jsTimestamp)} seconds`);
-                
+
                 // Calculate timing with blockchain timestamp (most accurate)
                 const stakeTime = stakeTimestamp.toNumber();
                 const timeStakedBlockchain = blockTimestamp - stakeTime;
                 const timeStakedJS = jsTimestamp - stakeTime;
-                
+
                 console.log('📅 STAKING TIME ANALYSIS:');
                 console.log(`  Stake Time: ${stakeTime} (${new Date(stakeTime * 1000).toLocaleString()})`);
                 console.log(`  Time Staked (Blockchain): ${timeStakedBlockchain} seconds`);
@@ -7446,25 +7527,25 @@ pragma solidity 0.8.19;
                 console.log(`  Days Staked (Blockchain): ${(timeStakedBlockchain / 86400).toFixed(6)} days`);
                 console.log(`  Hours Staked (Blockchain): ${(timeStakedBlockchain / 3600).toFixed(4)} hours`);
                 console.log(`  Minutes Staked (Blockchain): ${(timeStakedBlockchain / 60).toFixed(2)} minutes`);
-                
+
                 // Calculate unlock time
                 const unlockTime = stakeTime + lockPeriod.toNumber();
                 const timeUntilUnlock = unlockTime - blockTimestamp;
-                
+
                 console.log('🔓 UNLOCK TIME ANALYSIS:');
                 console.log(`  Unlock Time: ${unlockTime} (${new Date(unlockTime * 1000).toLocaleString()})`);
                 console.log(`  Time Until Unlock: ${timeUntilUnlock} seconds`);
                 console.log(`  Days Until Unlock: ${(timeUntilUnlock / 86400).toFixed(6)} days`);
                 console.log(`  Hours Until Unlock: ${(timeUntilUnlock / 3600).toFixed(4)} hours`);
-                
+
                 // Check contract's fee calculation
                 const canWithdrawWithoutFee = await stakingContract.canWithdrawWithoutFee(userAddress);
-                
+
                 console.log('💰 FEE STATUS:');
                 console.log(`  Can Withdraw Without Fee: ${canWithdrawWithoutFee}`);
                 console.log(`  Should be fee-free when: ${timeStakedBlockchain} >= ${lockPeriod.toNumber()}`);
                 console.log(`  Condition met: ${timeStakedBlockchain >= lockPeriod.toNumber()}`);
-                
+
                 // CRITICAL TEST: Verify the exact math the contract uses
                 console.log('🔍 CRITICAL VERIFICATION:');
                 console.log(`  Contract Logic: current_time (${blockTimestamp}) - stake_time (${stakeTime}) >= lock_period (${lockPeriod.toNumber()})`);
@@ -7472,20 +7553,20 @@ pragma solidity 0.8.19;
                 console.log(`  Test: ${timeStakedBlockchain} >= ${lockPeriod.toNumber()} = ${timeStakedBlockchain >= lockPeriod.toNumber()}`);
                 console.log(`  Contract Result: ${canWithdrawWithoutFee}`);
                 console.log(`  Results Match: ${(timeStakedBlockchain >= lockPeriod.toNumber()) === canWithdrawWithoutFee}`);
-                
+
                 // Test exact 1-day scenario
                 if (lockPeriodDays === 1) {
                     console.log('📊 1-DAY SCENARIO VERIFICATION:');
                     console.log(`  Expected: 86400 seconds = 1 day`);
                     console.log(`  Contract: ${lockPeriod.toNumber()} seconds`);
                     console.log(`  Match: ${lockPeriod.toNumber() === 86400}`);
-                    
+
                     const exactHoursStaked = timeStakedBlockchain / 3600;
                     console.log(`  Hours Staked: ${exactHoursStaked.toFixed(6)}`);
                     console.log(`  Should unlock at: 24.000000 hours`);
                     console.log(`  Currently unlocked: ${canWithdrawWithoutFee}`);
                 }
-                
+
                 // Return comprehensive results
                 const results = {
                     contractAddress,
@@ -7503,34 +7584,34 @@ pragma solidity 0.8.19;
                     isExact1Day: lockPeriod.toNumber() === 86400,
                     accuracyVerified: true
                 };
-                
+
                 console.log('✅ COMPREHENSIVE TEST COMPLETE');
                 console.log('='.repeat(50));
-                
+
                 return results;
-                
+
             } catch (error) {
                 console.error('❌ Error in comprehensive time test:', error);
                 showStatus('Error in time verification: ' + error.message, 'error');
                 return { error: error.message };
             }
         }
-        
+
         // Quick test for 1-day contracts specifically  
         async function testOneDayContract(contractAddress) {
             console.log('🎯 TESTING 1-DAY CONTRACT SPECIFICALLY');
-            
+
             const result = await comprehensiveTimeTest(contractAddress);
-            
+
             if (result.error) return result;
-            
+
             console.log('📋 1-DAY CONTRACT SUMMARY:');
             console.log(`  Is exactly 1 day (86400s): ${result.isExact1Day}`);
             console.log(`  Time staked: ${result.timeStakedHours.toFixed(4)} hours`);
             console.log(`  Should unlock at: 24.0000 hours`);
             console.log(`  Currently fee-free: ${result.canWithdrawWithoutFee}`);
             console.log(`  Contract math correct: ${result.contractMathCorrect}`);
-            
+
             const hoursRemaining = 24 - result.timeStakedHours;
             if (hoursRemaining > 0) {
                 console.log(`  Hours remaining: ${hoursRemaining.toFixed(4)}`);
@@ -7538,10 +7619,10 @@ pragma solidity 0.8.19;
             } else {
                 console.log(`  ✅ 24+ hours completed, should be fee-free!`);
             }
-            
+
             return result;
         }
-        
+
         // Make new functions globally available
         window.searchContracts = searchContracts;
         window.filterContracts = filterContracts;
@@ -7553,16 +7634,16 @@ pragma solidity 0.8.19;
         window.verifyAPYCalculation = verifyAPYCalculation;
         window.comprehensiveTimeTest = comprehensiveTimeTest;
         window.testOneDayContract = testOneDayContract;
-        
+
         // Auto-search on input
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
-                searchInput.addEventListener('input', function() {
+                searchInput.addEventListener('input', function () {
                     clearTimeout(this.searchTimeout);
                     this.searchTimeout = setTimeout(searchContracts, 300);
                 });
-                
+
                 // Change placeholder text on mobile
                 function updatePlaceholder() {
                     if (window.innerWidth <= 480) {
@@ -7571,7 +7652,7 @@ pragma solidity 0.8.19;
                         searchInput.placeholder = 'Search by contract name, token symbol, or address...';
                     }
                 }
-                
+
                 // Update on load and resize
                 updatePlaceholder();
                 window.addEventListener('resize', updatePlaceholder);
@@ -7582,7 +7663,7 @@ pragma solidity 0.8.19;
 
 
 
-<!--LOTS OF UNUSED CODE BELOW BUT BE CAREFUL DELETING-->
+    <!--JOSH FYI - LOTS OF UNUSED CODE BELOW BUT BE NOT SURE WHAT IS SAFE TO DELET-->
 
     <script>
 
@@ -8206,10 +8287,10 @@ pragma solidity 0.8.19;
 
         // Global variables
 
-      //  let provider;
-      //  let signer;
+        //  let provider;
+        //  let signer;
         let CONTRACT;
-      //  let userAddress;
+        //  let userAddress;
         let currentETHPrice = FALLBACK_ETH_PRICE;
         let isAllInclusiveFactory = false; // true only if creation fee probe succeeds
 
