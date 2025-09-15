@@ -1238,7 +1238,7 @@
 
 </head>
 
-<body class="page-launch"> <!-- Determines hero picture -->
+<body class="page-staking"> <!-- Determines hero picture -->
     <!-- Top chrome: fixed wrapper that always stays above the page -->
     <div class="site-chrome">
         <!-- Transaction Ticker Widget -->
@@ -3769,6 +3769,10 @@
             })();
         </script>
 
+        <!--==== MAIN PAGE CONTENT =========
+        ====================================
+        =================================-->
+
         <div class="page-wrapper">
             <div id="riskBanner"
                 style="display:none;margin:0 0 18px 0;padding:12px 18px;border-radius:10px;font-size:0.75rem;font-weight:600;line-height:1.35;background:linear-gradient(135deg,#7b1f21,#b11b1e);color:#fff;border:1px solid #ffcccc;box-shadow:0 2px 6px -1px rgba(0,0,0,0.25);">
@@ -3778,7 +3782,7 @@
             <div class="container">
 
                 <div class="main-content">
-                    <!-- Connection Status -->
+                    <!-- Wallet Connection Card -->
                     <div class="card">
                         <div class="card-title">Wallet Connection</div>
                         <div id="connectionStatus" class="status status-info">
@@ -3801,32 +3805,42 @@
                         </div>
                     </div>
 
-                    <!-- Fee breakdown removed per request -->
 
                     <div class="grid-2" id="mainContent" style="display: none;">
-                        <!-- Token Creation Form -->
+                        <!-- Deploy Staking Contract Form -->
                         <div class="card" id="tokenCreationCard">
-                            <div class="card-title">Create New Token</div>
+                            <div class="card-title">Deploy New Staking Contract</div>
                             <form id="tokenForm">
                                 <div class="form-group">
-                                    <label class="form-label" for="tokenName">Token Name</label>
-                                    <input type="text" id="tokenName" class="form-input"
-                                        placeholder="e.g., My Awesome Token" maxlength="32" required>
+                                    <label>Staking Token Address</label>
+                                    <input type="text" id="stakingToken" class="form-input" placeholder="0x0000... (or 0x0 for ETH)" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="tokenSymbol">Token Symbol</label>
-                                    <input type="text" id="tokenSymbol" class="form-input" placeholder="e.g., MAT"
-                                        maxlength="10" required>
+                                    <label>Reward Token Address</label>
+                                    <input type="text" id="rewardToken" class="form-input" placeholder="0x0000... (or 0x0 for ETH)" required>
                                 </div>
                                 <div class="form-group">
-                                    <div class="balance-display">
-                                        <div class="balance-label">Available Balance</div>
-                                        <div class="balance-amount" id="walletBalance">0.0000 ETH ($0.00)</div>
-                                    </div>
+                                    <label>Early Withdrawal Fee Period (days)</label>
+                                    <input type="number" id="lockPeriod" class="form-input" placeholder="30" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Early Withdrawal Fee (%)</label>
+                                    <input type="number" id="earlyFee" class="form-input" placeholder="5" min="0" max="50" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Annual Percentage Yield (%)</label>
+                                    <input type="number" id="apy" class="form-input" placeholder="12.5" min="0.1" max="1000" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Minimum Stake Amount</label>
+                                    <input type="number" id="minStake" class="form-input" placeholder="0.01" min="0" step="0.000001" required>
+                                </div>
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label>Contract Name</label>
+                                    <input type="text" id="contractName" class="form-input" placeholder="My Staking Pool" required>
                                 </div>
                                 <div class="btn-group btn-group-full" style="display:flex;justify-content:center;">
-                                    <button type="submit" class="btn btn-primary" id="createTokenBtn">Create Token &
-                                        LP</button>
+                                    <button type="submit" class="btn btn-primary" id="createTokenBtn">Deploy Contract</button>
                                 </div>
                             </form>
                         </div>
