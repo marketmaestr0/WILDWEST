@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WILDWEST Chat Assistant</title>
+    <style>
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .chat-bubble {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2c3e50 0%, #5d6d7e 35%, #85929e 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            border: 2px solid #85929e;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-bubble::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #5d6d7e 0%, #85929e 35%, #2c3e50 100%);
+        }
+
+        .chat-bubble img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: bounce 2s infinite;
+        }
+
+        .inline-horse {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: middle;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid #85929e;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-window.open {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #85929e 0%, #2c3e50 50%, #5d6d7e 100%);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 3px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background: linear-gradient(135deg, #85929e, #5d6d7e);
+            color: white;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #e0e0e0, #f0f0f0);
+            color: #333;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chat-input input:focus {
+            border-color: #85929e;
+            box-shadow: 0 0 10px rgba(133, 146, 158, 0.3);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #ffae00 50%, #00eaff 100%);
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px #ffae00,
+                0 0 40px #ffae00,
+                0 0 60px #ffae00,
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transform: rotate(45deg);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            background: linear-gradient(135deg, #00eaff 0%, #ffae00 50%, #ff6b35 100%);
+            box-shadow: 
+                0 0 30px #00eaff,
+                0 0 50px #00eaff,
+                0 0 70px #00eaff,
+                0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 30px #00eaff,
+                    0 0 50px #00eaff,
+                    0 0 70px #00eaff,
+                    0 8px 25px rgba(0, 0, 0, 0.4); 
+            }
+            50% { 
+                box-shadow: 
+                    0 0 40px #ffae00,
+                    0 0 60px #ffae00,
+                    0 0 80px #ffae00,
+                    0 8px 25px rgba(0, 0, 0, 0.4); 
+            }
+        }
+
+        .quick-questions {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .quick-question {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border: 2px solid #00eaff;
+            color: #00eaff;
+            padding: 8px 12px;
+            margin: 5px 5px 5px 0;
+            border-radius: 15px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.3px;
+            box-shadow: 
+                0 0 15px #00eaff,
+                0 0 30px #00eaff,
+                0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .quick-question::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 234, 255, 0.2), 
+                transparent);
+            transition: left 0.6s;
+        }
+
+        .quick-question:hover::before {
+            left: 100%;
+        }
+
+        .quick-question:hover {
+            background: linear-gradient(135deg, #ff6b35 0%, #ffae00 50%, #00eaff 100%);
+            color: #000;
+            border-color: #ffae00;
+            box-shadow: 
+                0 0 20px #ffae00,
+                0 0 40px #ffae00,
+                0 5px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px) scale(1.05);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            font-weight: 700;
+        }
+
+        .typing {
+            display: none;
+            padding: 10px 15px;
+            font-style: italic;
+            color: #666;
+        }
+
+        .typing.show {
+            display: block;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .chat-window {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 40px);
+                bottom: 10px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-bubble" onclick="toggleChat()">
+            <img src="HORSEPIC.jpg" alt="WILDWEST Horse" />
+        </div>
+        
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <h3><img src="HORSEPIC.jpg" alt="Horse" class="inline-horse"> WILDWEST Assistant</h3>
+                <button class="close-btn" onclick="toggleChat()">×</button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Initial greeting will be added by JavaScript -->
+            </div>
+            
+            <div class="typing" id="typing">
+                <img src="HORSEPIC.jpg" alt="Horse" class="inline-horse"> Horse is thinking...
+            </div>
+            
+            <div class="quick-questions">
+                <div class="quick-question" onclick="askQuestion('How do I launch a token?')">How do I launch a token?</div>
+                <div class="quick-question" onclick="askQuestion('What is WILDW token?')">What is WILDW token?</div>
+                <div class="quick-question" onclick="askQuestion('How does the platform work?')">Platform features?</div>
+                <div class="quick-question" onclick="askQuestion('What are the fees?')">Fees & costs?</div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const OPENAI_API_KEY = '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';
+
+        // Conversation state
+        let conversationStarted = false;
+        let messageHistory = [];
+
+        // System prompt for OpenAI
+        const systemPrompt = `You are HORSE BOT, the AI assistant for the WILDWEST ecosystem - a confident stallion with attitude.
+
+ABOUT WILDWEST PLATFORM (wildwestlaunch.xyz):
+- Factory Contract: 0xaB4FE16F395921081bD9895359cf173a2Eaa7125 on Base chain
+- Token creation is NEARLY FREE - users only pay a few cents for gas fees and liquidity pool creation
+- 5-minute EXCLUSIVE developer buy window after launch (no public trading until after)
+- Automatic source code verification on BaseScan
+- Currently Base Network only, Solana integration coming soon
+- Official Telegram: https://t.me/wildwestlaunchpad
+- Official Twitter: https://x.com/WILDWESTLP
+
+WILDW UTILITY TOKEN:
+- Contract: 0x8129609E5303910464FCe3022a809fA44455Fe9A (Base Network)
+- Pay for premium services, governance rights, platform rewards
+
+COMPREHENSIVE PLATFORM SERVICES:
+- Token Launch: Nearly free creation, just need name & symbol, auto-verified contracts
+- Token Locking: FREE service (pay only gas), lock any token for any duration, any beneficiary
+- Token Furnace: Burn any token permanently to dead wallet (IRREVERSIBLE)
+- NFT Marketplace: Coming soon
+- Staking Systems: Available
+- Trading Fees: 1% on liquidity pools, projects get 50% of ETH rewards and ALL token rewards
+
+TRENDING ALGORITHM:
+- Trading Volume (30% weight)
+- Transaction Count (30% weight) 
+- Market Capitalization (30% weight)
+- Recency Factor (10% weight - newer tokens get slight boost)
+
+PROFESSIONAL TEAM:
+- Josh: Lead Engineer & Smart Contracts
+- Based Queen: Social Media Manager
+- Liquidity: Partnerships & Business Development
+- Cash: Community Host
+- Market: Brand & Visual Design
+- CT: Audio Engineer & Artist
+- Sordisol: Growth Marketing
+- Seth: Product Strategy
+- Mark: Strategic Advisor
+
+SECURITY: Factory contracts are verified and open-source for full transparency.
+
+EDITING: After token launch, connect wallet to edit project card - logo, banner, links can all be updated anytime.
+
+PERSONALITY: You're a confident stallion with swagger and attitude. Be witty, helpful, and use horse/western themes. Keep responses concise (under 150 words) for website visitors.
+
+IMPORTANT: DO NOT greet the user in your responses. The conversation has already begun. Jump straight into answering their question with helpful information. Use western/horse expressions naturally within your answers, but don't start with greetings like "Well well well" or "Howdy".
+
+Examples of good responses:
+- "Token creation costs just a few cents for gas fees, partner!"
+- "Hold your horses there - let me break down the dev buy window..."
+- "Don't get your bridle in a twist, here's how it works..."
+
+Stay helpful with personality - you're a wise-guy horse who knows the crypto game inside out!`;
+
+        // WILDWEST Knowledge Base - Comprehensive fallback responses from website scan
+        const wildwestKnowledge = {
+            'tokenLaunch': {
+                keywords: ['launch', 'create', 'token', 'deploy', 'cost', 'fee', 'price', 'how much'],
+                response: "Well partner, token creation is NEARLY FREE! You only pay a few cents for gas fees and liquidity pool creation. Just need a token name and symbol. Currently Base Network only, but Solana is galloping our way soon!"
+            },
+            'devBuy': {
+                keywords: ['dev buy', 'developer', 'exclusive', '5 minutes', 'window', 'first'],
+                response: "Hold your horses there, cowboy! Developers get a 5-minute EXCLUSIVE buying window after launch - nobody else can trade during this time! After 5 minutes, it's open season for everyone. Perfect for securing your position!"
+            },
+            'platform': {
+                keywords: ['wildwest', 'platform', 'what is', 'about', 'overview', 'services'],
+                response: "Well well well, let me break it down! WILDWEST is THE premier token launchpad on Base. We offer FREE token launches, token locking, Token Furnace for burning, staking, and trending algorithms. Check us out at wildwestlaunch.xyz!"
+            },
+            'wildwToken': {
+                keywords: ['wildw', 'utility', 'token', 'benefits', 'rewards', '0x8129609E5303910464FCe3022a809fA44455Fe9A'],
+                response: "Now you're talking sense! WILDW is our utility token on Base Network (0x8129609E5303910464FCe3022a809fA44455Fe9A). Used for platform services, governance, and premium features. Smart money accumulates WILDW!"
+            },
+            'fees': {
+                keywords: ['fees', 'trading', '1%', 'rewards', 'liquidity', 'cost'],
+                response: "Don't get your bridle in a twist about costs! There's a 1% fee on liquidity pools, and projects get 50% of ETH rewards plus ALL token rewards. Fair deal for everyone, partner!"
+            },
+            'trending': {
+                keywords: ['trending', 'algorithm', 'rank', 'visibility', 'boost'],
+                response: "Our trending system ain't no mystery! It weighs Trading Volume (30%), Transaction Count (30%), Market Cap (30%), and gives new tokens a Recency boost (10%). Fair and square!"
+            },
+            'team': {
+                keywords: ['team', 'who', 'developers', 'behind', 'company', 'founders'],
+                response: "We've got a full professional outfit! Led by Josh (Lead Engineer), Based Queen (Social), Liquidity (Partnerships), Cash (Community), Market (Design), CT (Audio), Sordisol (Growth), Seth (Product), and Mark (Strategy). Real deal!"
+            },
+            'security': {
+                keywords: ['secure', 'safe', 'verified', 'contract', 'audit', 'trust'],
+                response: "You bet we're secure! Factory contracts are verified and open-source for full transparency. Source code automatically gets sent to BaseScan for verification. We don't mess around with security!"
+            },
+            'locking': {
+                keywords: ['lock', 'locking', 'tokens', 'vesting', 'beneficiary'],
+                response: "Token locking is FREE as a prairie breeze! Lock any token for any duration, choose any beneficiary wallet. Pay only gas fees. Perfect for building trust and showing you're serious!"
+            },
+            'furnace': {
+                keywords: ['burn', 'furnace', 'destroy', 'dead wallet', 'deflationary'],
+                response: "The Token Furnace burns tokens permanently to a dead wallet - IRREVERSIBLE! Great for reducing supply and creating deflationary pressure. Use it wisely, partner!"
+            },
+            'editing': {
+                keywords: ['edit', 'change', 'logo', 'banner', 'update', 'modify', 'customize'],
+                response: "After launch, just connect your wallet to edit your project card! Logo, banner, links - all can be updated anytime. Full customization control at your fingertips!"
+            },
+            'wallet': {
+                keywords: ['connect', 'wallet', 'mobile', 'desktop', 'metamask', 'base'],
+                response: "On mobile: use your wallet app's browser. On desktop: install wallet extensions. We support Base and Solana wallets. Easy as saddling a gentle mare!"
+            },
+            'default': {
+                response: "Well howdy, partner! Welcome to WILDWEST - the premier token launchpad on Base Network! Free launches, 5-min dev buy periods, professional team, and full utility suite. What brings you to our digital frontier?"
+            }
+        };
+
+        const greetings = [
+            "Howdy there, partner! What can this stallion help you with today?",
+            "Well well well, another visitor! Ask me anything about WILDWEST, cowboy!",
+            "Don't get your bridle in a twist - I'm here to help! What's on your mind?",
+            "Hold your horses there! Ready to learn about the WILDWEST platform?"
+        ];
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.toggle('open');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function askQuestion(question) {
+            document.getElementById('messageInput').value = question;
+            sendMessage();
+        }
+
+        function addMessage(message, isBot = false) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isBot ? 'bot-message' : 'user-message'}`;
+            
+            // Automatically add horse image to all bot messages
+            if (isBot) {
+                // Check if message already has horse image to avoid duplication
+                if (!message.includes('HORSEPIC.jpg')) {
+                    message = "<img src='HORSEPIC.jpg' alt='Horse' class='inline-horse'> " + message;
+                }
+            }
+            
+            messageDiv.innerHTML = message;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            document.getElementById('typing').classList.add('show');
+        }
+
+        function hideTyping() {
+            document.getElementById('typing').classList.remove('show');
+        }
+
+        function findBestResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            let bestMatch = wildwestKnowledge.default;
+            let maxMatches = 0;
+
+            // Check each knowledge category for fallback
+            for (const [key, data] of Object.entries(wildwestKnowledge)) {
+                if (key === 'default') continue;
+                
+                let matches = 0;
+                for (const keyword of data.keywords) {
+                    if (lowerMessage.includes(keyword)) {
+                        matches++;
+                    }
+                }
+                
+                if (matches > maxMatches) {
+                    maxMatches = matches;
+                    bestMatch = data;
+                }
+            }
+
+            return bestMatch.response;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, false);
+            input.value = '';
+
+            // Mark conversation as started (but don't reset if already started)
+            if (!conversationStarted) {
+                conversationStarted = true;
+            }
+            
+            // Add to message history for context
+            messageHistory.push({ role: 'user', content: message });
+
+            // Show typing indicator
+            showTyping();
+
+            try {
+                // Build messages array with system prompt and conversation history
+                const messages = [
+                    { role: 'system', content: systemPrompt },
+                    ...messageHistory.slice(-6) // Keep last 6 messages for context
+                ];
+
+                // Try OpenAI API first
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: messages,
+                        max_tokens: 200,
+                        temperature: 0.8
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.choices && data.choices[0]) {
+                        const botResponse = data.choices[0].message.content.trim();
+                        
+                        // Add bot response to history
+                        messageHistory.push({ role: 'assistant', content: botResponse });
+                        
+                        hideTyping();
+                        addMessage(botResponse, true);
+                        return;
+                    }
+                }
+                
+                throw new Error('API response failed');
+
+            } catch (error) {
+                console.error('OpenAI API error:', error);
+                
+                // Fallback to knowledge base
+                hideTyping();
+                setTimeout(() => {
+                    const fallbackResponse = findBestResponse(message);
+                    
+                    // Add fallback response to history
+                    messageHistory.push({ role: 'assistant', content: fallbackResponse });
+                    
+                    addMessage(fallbackResponse, true);
+                }, 500);
+            }
+        }
+
+        // Initialize chat with random greeting
+        function initializeChat() {
+            if (conversationStarted) return; // Don't initialize if conversation already started
+            
+            const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+            addMessage(randomGreeting, true);
+            conversationStarted = true; // Mark as started after initial greeting
+        }
+
+        // Auto-initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeChat();
+        });
+    </script>
+</body>
+</html>

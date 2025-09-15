@@ -1,0 +1,194 @@
+
+
+        <mark>.link-placeholder {
+            color: #666;
+            font-style: italic;
+            font-size: 0.85em;
+        }</mark>
+
+        <mark>.token-link .link-text {
+            display: inline;
+            flex: 0 1 auto;
+            /* claim leftover space */
+            min-width: 2ch;
+            /* don't collapse to 0 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+        }</mark>
+
+        @container token (max-width: 300px) {
+            <mark>.token-link .link-text {
+                display: none;
+            }</mark>
+
+            /* icons + ticks stay */
+            .token-link {
+                padding: 0.4rem;
+            }
+        }
+
+
+
+
+
+        /* Active hover/focus */
+        <mark>.token-link:not(.is-disabled):is(:hover, :focus-visible) {
+            transform: translateY(-1px);
+            box-shadow: 0 0 0 2px var(--yellow-30);
+            border-color: var(--yellow);
+        }</mark>
+
+        /* Disabled (missing link) */
+        <mark>.token-link.is-disabled {
+            opacity: 0.35;
+            filter: grayscale(100%);
+            border-style: dashed;
+            pointer-events: none;
+            /* not clickable */
+        }</mark>
+
+
+        /* If the button is disabled (no address), keep the tick/cross subdued */
+        <mark>.token-link.is-disabled::after {
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }</mark>
+
+
+
+        <mark>.load-more-btn {
+            display: block;
+            width: 200px;
+            margin: 2rem auto 3rem auto;
+            /* Fixed: reasonable spacing that won't get cut off */
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #0088ff, #0070cc);
+            border: none;
+            border-radius: 25px;
+            color: #000;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }</mark>
+
+        <mark>.load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 136, 255, 0.4);
+        }</mark>
+
+        <mark>.load-more-btn:disabled {
+            background: linear-gradient(45deg, #666, #555);
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none;
+            box-shadow: none;
+        }</mark>
+
+        <mark>.load-more-btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }</mark>
+
+        <mark>.back-btn {
+            display: block;
+            width: 200px;
+            margin: 1rem auto 4rem auto;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }</mark>
+
+        <mark>.back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }</mark>
+
+   
+
+            /* Mobile-optimized Load More button */
+            <mark>.load-more-btn {
+                width: calc(100% - 2rem);
+                max-width: 300px;
+                padding: 1.2rem 2rem;
+                margin: 2rem auto 5rem auto;
+                /* Increased bottom margin to clear banner */
+                font-size: 1.1rem;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+                border-radius: 30px;
+            }</mark>
+
+            <mark>.load-more-btn:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }</mark>
+
+
+            /* Optimized load more for small screens */
+            <mark>.load-more-btn {
+                width: calc(100% - 1rem);
+                margin: 1.5rem auto 4rem auto;
+                /* Increased bottom margin to clear banner */
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }</mark>
+
+        <mark>@keyframes shimmer {
+            0% {
+                left: -50px;
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 50px;
+                opacity: 0;
+            }
+        }</mark>
+
+ 
+
+        <mark>.insufficient-volume-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.9);
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-align: center;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3);
+            animation: volumeWarningPulse 2s ease-in-out infinite alternate;
+            white-space: nowrap;
+        }</mark>
+
+      
+
+        <mark>.token-card.insufficient-volume {
+            position: relative;
+        }</mark>
+
+        <mark>.token-card.insufficient-volume .token-stats {
+            position: relative;
+        }</mark>
+
+        
