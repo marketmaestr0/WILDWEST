@@ -462,6 +462,13 @@ body {
   z-index: -1; /* use 0 + make content z-index:1 if needed */
 }
 
+.utility-hero-content h1 {
+  font-size: clamp(3rem, 8vw, 8rem);
+  letter-spacing: 0.6rem;
+  font-family: var(--font-display);
+  text-shadow: 0 0 20px var(--light-blue-60);
+}
+
 /* Page variants — only override the variables */
 body.page-launch  .utility-hero__bg { background-image: url("../images/token-launch-hero.webp"); }
 body.page-nft-marketplace  .utility-hero__bg { background-image: url("../images/"); }
@@ -471,25 +478,16 @@ body.page-furnace  .utility-hero__bg { background-image: url("../images/"); }
 body.page-team  .utility-hero__bg { background-image: url("../images/"); }
 body.page-arcade  .utility-hero__bg { background-image: url("../images/"); }
 body.coming-soon  .utility-hero__bg { background-image: url("../images/coming-soon-image.webp"); }
-/* add more pages as needed... */
 
-.utility-hero-content h1 {
-  font-size: clamp(3rem, 8vw, 8rem);
-  letter-spacing: 0.6rem;
-  font-family: var(--font-display);
-  text-shadow: 0 0 20px var(--light-blue-60);
-}
-
-/* Page variants — only override the variables */
 body.coming-soon  .utility-hero-content h1 { text-shadow: 0 0 20px var(--panel); }
 body.page-staking  .utility-hero-content h1 { text-shadow: 0 0 20px var(--panel); }
-/* add more pages as needed... */
+body.page-staking  .utility-hero-content p { text-shadow: 0 0 10px var(--panel); }
+
 
 .utility-hero-content p {
   font-size: 1rem;
   margin-top: 1rem;
   letter-spacing: 0.5rem;
-  text-shadow: 0 0 10px var(--light-blue-60);
 }
 
 /* Page variants — only override the variables */
