@@ -34,6 +34,7 @@
   --mid-blue-50: #3fb1be83;
   --dark-blue: #005761;
   --base-blue: #0000ff;
+  --neon: #00eaff;
 
   /* Typography */
   --font-ui: "Orbitron", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -244,7 +245,7 @@ body {
   line-height: 1.2;
 }
 
-/* --- Panel (anchored under parent, animatable) --- */
+/* --- Dropdown Panel (anchored under parent, animatable) --- */
 .nav-links .dropdown>.dropdown-menu {
   position: absolute;
   top: 100%;
@@ -438,8 +439,6 @@ body {
   text-shadow: 0 0 10px var(--light-blue-60);
 }
 
-
-
 .utility-hero {
   position: relative;
   min-height: 500px;
@@ -466,7 +465,7 @@ body {
 /* Page variants — only override the variables */
 body.page-launch  .utility-hero__bg { background-image: url("../images/token-launch-hero.webp"); }
 body.page-nft-marketplace  .utility-hero__bg { background-image: url("../images/"); }
-body.page-staking  .utility-hero__bg { background-image: url("../images/"); }
+body.page-staking  .utility-hero__bg { background-image: url("../images/staking-hero.webp"); }
 body.page-locking .utility-hero__bg { background-image: url("../images/Bank_Colorised.webp"); }
 body.page-furnace  .utility-hero__bg { background-image: url("../images/"); }
 body.page-team  .utility-hero__bg { background-image: url("../images/"); }
@@ -496,6 +495,10 @@ body.coming-soon  .utility-hero-content h1 { text-shadow: 0 0 20px var(--panel);
 body.coming-soon  .utility-hero-content p1 { text-shadow: 0 0 5px var(--panel); }
 /* add more pages as needed... */
 
+
+/* =========================
+   Wallet Connections
+   ========================= */
 
 
 /* MOBILE WALLET DETECTION STYLES */
@@ -574,28 +577,6 @@ body.coming-soon  .utility-hero-content p1 { text-shadow: 0 0 5px var(--panel); 
   flex-direction: column;
   align-items: flex-end;
   margin-left: auto;
-}
-
-.connect-btn {
-  background: #3498db;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.connect-btn.connected {
-  background: #27ae60;
-}
-
-.connect-btn:hover {
-  background: #217dbb;
 }
 
 #walletIcon {
@@ -935,6 +916,11 @@ body.coming-soon  .utility-hero-content p1 { text-shadow: 0 0 5px var(--panel); 
   }
 }
 
+
+/* =========================
+   Footer
+   ========================= */
+
 .footer-section {
   border-top: 2px solid var(--violet);
   padding: 1rem 1rem;
@@ -983,25 +969,6 @@ body.coming-soon  .utility-hero-content p1 { text-shadow: 0 0 5px var(--panel); 
   cursor: pointer;
   /* shows hand cursor */
   position: relative;
-}
-
-.copy-tooltip {
-  position: fixed;
-  background: var(--yellow);
-  color: var(--panel);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -120%);
-  transition: opacity 0.3s ease;
-  z-index: 2147483647;
-  /* higher than any site overlay/iframe */
-}
-
-.copy-tooltip.show {
-  opacity: 1;
 }
 
 
