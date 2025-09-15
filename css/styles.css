@@ -482,6 +482,7 @@ body.coming-soon  .utility-hero__bg { background-image: url("../images/coming-so
 
 /* Page variants — only override the variables */
 body.coming-soon  .utility-hero-content h1 { text-shadow: 0 0 20px var(--panel); }
+body.page-staking  .utility-hero-content h1 { text-shadow: 0 0 20px var(--panel); }
 /* add more pages as needed... */
 
 .utility-hero-content p {
