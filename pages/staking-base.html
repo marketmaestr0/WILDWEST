@@ -277,6 +277,12 @@
             opacity: 0.9;
         }
 
+        .utility-hero-content p {
+  max-width: 600px; /* adjust to control line length */
+  margin: 0 auto;   /* center it (optional) */
+  line-height: 1.5; /* improves readability */
+}
+
         .card {
             background: var(--dark-violet-60);
             border: 1px solid rgba(148, 163, 184, 0.15);
@@ -1306,10 +1312,12 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
             position: relative;
-            flex: 1; /* Fills all available space */
-  padding: 0.5rem 0.75rem;
-  border-right: none; /* Seamless join with button */
-  border-radius: 8px 0 0 8px;
+            flex: 1;
+            /* Fills all available space */
+            padding: 0.5rem 0.75rem;
+            border-right: none;
+            /* Seamless join with button */
+            border-radius: 8px;
         }
 
         .search-input:focus {
@@ -1342,12 +1350,13 @@
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
-            flex: 0 0 48px; /* Fixed width — change to your preferred size */
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
+            flex: 0 0 48px;
+            /* Fixed width — change to your preferred size */
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
         }
 
         .search-btn:hover {
