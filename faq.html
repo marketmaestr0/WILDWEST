@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Wild West Launchpad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #1e40af;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .search-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #1e40af;
+        }
+
+        .faq-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .faq-section h2 {
+            color: #1e40af;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #1e40af;
+            display: inline-block;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            color: #0f172a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-answer ul {
+            text-align: left;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            color: #1e40af;
+            font-weight: 600;
+        }
+
+        .footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #93c5fd;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            
+            .faq-section {
+                padding: 1.5rem;
+            }
+            
+            .faq-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .search-input {
+                max-width: 100%;
+            }
+            
+            .faq-question {
+                font-size: 1rem;
+            }
+            
+            .faq-answer {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .faq-section {
+                padding: 1.25rem;
+            }
+            
+            .faq-section h2 {
+                font-size: 1.375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Frequently Asked Questions</h1>
+        <p>Everything you need to know about Wild West Launchpad</p>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to Home</a>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search FAQ..." onkeyup="searchFAQ()">
+        </div>
+
+        <div class="faq-section" id="token-launches">
+            <h2 class="section-title">Token Launches</h2>
+
+            <div class="faq-item">
+                <h3 class="faq-question">How much does it cost to launch a token?</h3>
+                <div class="faq-answer">
+                    <p>Token creation is free - you only pay gas fees and a few cents to start the liquidity pool.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">How does the dev buy period work?</h3>
+                <div class="faq-answer">
+                    <p>During the first 5 minutes after token launch, the developer has an exclusive window to buy the token and no one else can trade until that 5 minute window is over. Once the 5 minute window is over, the public is free to trade.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What information do I need to launch a token?</h3>
+                <div class="faq-answer">
+                    <p>You only need a token name and symbol to launch.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Which networks can I launch tokens on?</h3>
+                <div class="faq-answer">
+                    <p>Currently only Base Network is supported. We are working on adding Solana and then more EVM chains.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What happens after I launch my token?</h3>
+                <div class="faq-answer">
+                    <p>The source code is automatically sent to BaseScan to be verified and a liquidity pool is created on the corresponding DEX (Uniswap, etc.).</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Can I edit my token information after launch?</h3>
+                <div class="faq-answer">
+                    <p>Yes! Once your token is created, go to the main page and connect your wallet to edit your project card. Your logo, banner, and links can all be added and edited at any time.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="platform-utility">
+            <h2 class="section-title">Platform Utility & Features</h2>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What is token locking and how does it work?</h3>
+                <div class="faq-answer">
+                    <p>Anyone can lock any token and choose any beneficiary - themselves or another wallet. You can lock for any amount of time paying only the gas fees to create the contract. This is a free service.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What is the Developer Tracker feature?</h3>
+                <div class="faq-answer">
+                    <p>This feature is currently under development and will be used to track developer wallet holdings.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">How does the trending system work?</h3>
+                <div class="faq-answer">
+                    <p>Our trending algorithm evaluates tokens based on multiple factors:</p>
+                    <ul>
+                        <li><span class="highlight">Trading Volume:</span> 24-hour trading activity (30% weight)</li>
+                        <li><span class="highlight">Transaction Count:</span> Number of individual trades (30% weight)</li>
+                        <li><span class="highlight">Market Capitalization:</span> Total token valuation (30% weight)</li>
+                        <li><span class="highlight">Recency Factor:</span> Newer tokens receive slight boost (10% weight)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What are the trading fees?</h3>
+                <div class="faq-answer">
+                    <p>There is a 1% fee on the liquidity pool. The project keeps all of the token rewards from this pool and splits the ETH rewards with the platform - equating to around 75% for the project depending on buy and sell pressure.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">How do I connect my wallet?</h3>
+                <div class="faq-answer">
+                    <p>On mobile, connect your wallet inside of your wallet app using the integrated wallet browser. On desktop, you should have wallet extensions installed inside of your browser.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Is Wild West Launchpad secure?</h3>
+                <div class="faq-answer">
+                    <p>Yes, the factory contracts are verified and opensource for full transparency.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Disclaimer Section -->
+    <div class="faq-section">
+        <h2>Legal Disclaimer & Important Information</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">High Risk Investment Warning</div>
+            <div class="faq-answer">
+                <p><strong>Cryptocurrency investments are highly volatile and speculative.</strong> You may lose all invested funds. The value of digital assets can fluctuate dramatically and unpredictably. Only invest what you can afford to lose completely. Past performance does not guarantee future results.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Not Financial Advice</div>
+            <div class="faq-answer">
+                <p><strong>This platform provides cryptocurrency tools and services but does not constitute financial, investment, or trading advice.</strong> You are solely responsible for your investment decisions and their outcomes. Wild West Launchpad does not recommend any particular cryptocurrency or investment strategy. Always consult qualified financial professionals before making investment decisions.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Service Warranties</div>
+            <div class="faq-answer">
+                <p><strong>This service is provided "AS IS" without warranties of any kind.</strong> We make no representations or warranties regarding the accuracy, reliability, or completeness of any information on this platform. Use of this service is at your own risk.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Mobile Users - Important Setup</div>
+            <div class="faq-answer">
+                <p><strong>For optimal functionality on mobile devices:</strong> Open this website in your wallet's built-in browser (MetaMask, Phantom, Trust Wallet, Coinbase Wallet, etc.) instead of your regular mobile browser like Chrome or Safari. This ensures proper wallet connectivity and transaction functionality.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">User Responsibility</div>
+            <div class="faq-answer">
+                <p>By using Wild West Launchpad, you acknowledge that you:</p>
+                <ul>
+                    <li>Understand the high-risk nature of cryptocurrency investments</li>
+                    <li>Are solely responsible for your investment decisions</li>
+                    <li>Will not hold Wild West Launchpad liable for any losses</li>
+                    <li>Have read and understand these terms and disclaimers</li>
+                    <li>Are legally permitted to use cryptocurrency services in your jurisdiction</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Wild West Launchpad - Professional DeFi Platform</p>
+        <p>Join our community on <a href="https://t.me/wildwestlaunchpad">Telegram</a> and <a href="https://x.com/WILDWESTLP?t=RI3IQU3KASjN3Ak-yrfZnw&s=09">Twitter</a></p>
+    </div>
+
+    <script>
+        function searchFAQ() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const sections = document.getElementsByClassName('faq-section');
+            
+            for (let i = 0; i < sections.length; i++) {
+                const items = sections[i].getElementsByClassName('faq-item');
+                let sectionHasMatch = false;
+                
+                for (let j = 0; j < items.length; j++) {
+                    const question = items[j].getElementsByClassName('faq-question')[0];
+                    const answer = items[j].getElementsByClassName('faq-answer')[0];
+                    const textValue = question.textContent || question.innerText;
+                    const answerValue = answer.textContent || answer.innerText;
+                    
+                    if (textValue.toLowerCase().indexOf(filter) > -1 || 
+                        answerValue.toLowerCase().indexOf(filter) > -1) {
+                        items[j].style.display = "";
+                        sectionHasMatch = true;
+                    } else {
+                        items[j].style.display = "none";
+                    }
+                }
+                
+                // Show/hide entire section based on matches
+                if (filter === "" || sectionHasMatch) {
+                    sections[i].style.display = "";
+                } else {
+                    sections[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

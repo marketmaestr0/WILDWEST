@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEV TRACKER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #0a0a0a);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            border: 1px solid #444;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #c0c0c0, #808080, #606060);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #cccccc;
+            font-weight: 500;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .basescan-link-container {
+            margin-top: 20px;
+        }
+
+        .basescan-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #3a3a3a, #2a2a2a, #3a3a3a);
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid #555;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .basescan-link:hover {
+            background: linear-gradient(135deg, #4a4a4a, #3a3a3a, #4a4a4a);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 18px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .widget-container {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            border: 1px solid #444;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .widget-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.02) 50%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .holder-header {
+            background: linear-gradient(135deg, #3a3a3a, #2a2a2a, #3a3a3a);
+            padding: 20px 25px;
+            border-bottom: 1px solid #444;
+            position: relative;
+            z-index: 1;
+        }
+
+        .holder-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c0c0c0, #808080, #606060);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #holder-content {
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #cccccc;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top: 3px solid #c0c0c0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 1rem;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .dev-wallet-section {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a, #2a2a2a);
+            border-radius: 12px;
+            border: 1px solid #555;
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dev-wallet-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .dev-header {
+            background: linear-gradient(135deg, #3a3a3a, #2a2a2a, #3a3a3a);
+            padding: 20px 25px;
+            border-bottom: 1px solid #555;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dev-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c0c0c0, #808080, #606060);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .dev-info {
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dev-address {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid #444;
+            font-weight: 600;
+        }
+
+        .dev-address:hover {
+            color: #fff;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            transform: scale(1.02);
+            border-color: #555;
+        }
+
+        .dev-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .balance-large {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c0c0c0, #808080, #606060);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .percentage-large {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #bbb;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .header {
+                padding: 25px 15px;
+                margin-bottom: 20px;
+            }
+
+            .holder-header {
+                padding: 15px 20px;
+            }
+
+            .holder-title {
+                font-size: 1.2rem;
+            }
+
+            #holder-content {
+                padding: 20px;
+            }
+
+            .dev-info {
+                padding: 20px;
+            }
+
+            .dev-address {
+                font-size: 1rem;
+                padding: 8px;
+            }
+
+            .balance-large {
+                font-size: 1.8rem;
+            }
+
+            .percentage-large {
+                font-size: 1.1rem;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .title {
+                font-size: 1.6rem;
+                letter-spacing: 0.5px;
+            }
+
+            .subtitle {
+                font-size: 0.85rem;
+            }
+
+            .header {
+                padding: 20px 10px;
+                margin-bottom: 15px;
+            }
+
+            .basescan-link {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+
+            .widget-container {
+                border-radius: 12px;
+            }
+
+            .holder-header {
+                padding: 12px 15px;
+            }
+
+            .holder-title {
+                font-size: 1.1rem;
+            }
+
+            #holder-content {
+                padding: 15px;
+            }
+
+            .dev-header {
+                padding: 15px 20px;
+            }
+
+            .dev-header h3 {
+                font-size: 1.1rem;
+            }
+
+            .dev-info {
+                padding: 15px;
+            }
+
+            .dev-address {
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+
+            .balance-large {
+                font-size: 1.5rem;
+            }
+
+            .percentage-large {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+
+            .dev-stats {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">DEV TRACKER</h1>
+            <p class="subtitle" id="token-info">Analyzing developer wallet activity...</p>
+            <div class="basescan-link-container">
+                <a id="basescan-link" href="#" target="_blank" class="basescan-link">
+                    View All Holders on BaseScan
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-container">
+            <div class="holder-header">
+                <h2 class="holder-title">DEV Wallet Analysis</h2>
+            </div>
+            
+            <div id="holder-content">
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <div>Loading DEV wallet data...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class HolderWidget {
+            constructor() {
+                this.tokenAddress = null;
+                this.tokenSymbol = null;
+                this.tokenCreator = null;
+                this.tokenDecimals = 18;
+                this.totalSupply = Math.pow(10, 27);
+                
+                this.config = {
+                    baseScanApiKey: 'TZJQES8ZA41X17W1NIDIKHBVSMHBDID9RU',
+                    baseScanUrl: 'https://api.basescan.org/api'
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                console.log('🚀 Initializing DEV/TEAM Tracker...');
+                
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.tokenAddress = urlParams.get('token');
+                    this.tokenSymbol = urlParams.get('symbol') || 'TOKEN';
+
+                    if (!this.tokenAddress) {
+                        throw new Error('No token address provided');
+                    }
+
+                    console.log('🪙 Token:', this.tokenSymbol, this.tokenAddress);
+                    
+                    document.getElementById('token-info').textContent = 
+                        `${this.tokenSymbol} • ${this.tokenAddress.slice(0, 10)}...`;
+                    
+                    // Set BaseScan link
+                    const baseScanLink = document.getElementById('basescan-link');
+                    baseScanLink.href = `https://basescan.org/token/tokenholderchart/${this.tokenAddress}`;
+                    
+                    await this.loadTokenCreator();
+                    await this.loadDevWalletData();
+
+                    console.log('✅ Widget ready!');
+
+                } catch (error) {
+                    console.error('❌ Failed:', error);
+                    this.showErrorState(error);
+                }
+            }
+
+            async loadTokenCreator() {
+                try {
+                    console.log('🔍 Loading token creator...');
+                    
+                    const url = `${this.config.baseScanUrl}?module=contract&action=getcontractcreation&contractaddresses=${this.tokenAddress}&apikey=${this.config.baseScanApiKey}`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.status === '1' && data.result && data.result.length > 0) {
+                        this.tokenCreator = data.result[0].contractCreator;
+                        console.log('✅ Creator:', this.tokenCreator);
+                    } else {
+                        console.log('⚠️ No creator found');
+                    }
+                } catch (error) {
+                    console.warn('Creator loading failed:', error);
+                }
+            }
+
+            async loadDevWalletData() {
+                console.log('👤 Loading DEV wallet data...');
+                
+                try {
+                    await this.loadTokenMetadata();
+                    
+                    if (!this.tokenCreator) {
+                        throw new Error('No DEV wallet found');
+                    }
+                    
+                    const devData = await this.analyzeDevWallet();
+                    
+                    if (devData) {
+                        this.displayDevWallet(devData);
+                    } else {
+                        throw new Error('Failed to analyze DEV wallet');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Failed to load DEV wallet data:', error);
+                    this.showErrorState(error);
+                }
+            }
+
+            async loadTokenMetadata() {
+                const rpcUrl = 'https://responsive-omniscient-model.base-mainnet.quiknode.pro/aa86b92100862c55985ff1d322a9ff07d9ab236f/';
+                
+                try {
+                    const [decimalsResponse, supplyResponse] = await Promise.all([
+                        fetch(rpcUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: 1,
+                                jsonrpc: '2.0',
+                                method: 'eth_call',
+                                params: [{ to: this.tokenAddress, data: '0x313ce567' }, 'latest']
+                            })
+                        }),
+                        fetch(rpcUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: 2,
+                                jsonrpc: '2.0',
+                                method: 'eth_call',
+                                params: [{ to: this.tokenAddress, data: '0x18160ddd' }, 'latest']
+                            })
+                        })
+                    ]);
+                    
+                    const [decimalsData, supplyData] = await Promise.all([
+                        decimalsResponse.json(),
+                        supplyResponse.json()
+                    ]);
+                    
+                    this.tokenDecimals = parseInt(decimalsData.result || '0x12', 16);
+                    this.totalSupply = parseInt(supplyData.result || '0x0', 16);
+                    
+                    console.log(`📊 Token: ${this.tokenDecimals} decimals, ${(this.totalSupply / Math.pow(10, this.tokenDecimals)).toFixed(0)} total supply`);
+                    
+                } catch (error) {
+                    console.error('⚠️ Metadata failed:', error);
+                    this.tokenDecimals = 18;
+                    this.totalSupply = Math.pow(10, 27);
+                }
+            }
+
+            async analyzeDevWallet() {
+                console.log('🔍 Analyzing DEV wallet:', this.tokenCreator);
+                
+                const rpcUrl = 'https://responsive-omniscient-model.base-mainnet.quiknode.pro/aa86b92100862c55985ff1d322a9ff07d9ab236f/';
+                
+                try {
+                    const balanceResponse = await fetch(rpcUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: 1,
+                            jsonrpc: '2.0',
+                            method: 'eth_call',
+                            params: [{
+                                to: this.tokenAddress,
+                                data: '0x70a08231000000000000000000000000' + this.tokenCreator.slice(2)
+                            }, 'latest']
+                        })
+                    });
+                    
+                    const balanceData = await balanceResponse.json();
+                    const balance = parseInt(balanceData.result || '0x0', 16);
+                    const percentage = (balance / this.totalSupply) * 100;
+                    
+                    console.log('💰 DEV balance:', balance, 'Percentage:', percentage.toFixed(2) + '%');
+                    
+                    return {
+                        address: this.tokenCreator,
+                        balance: balance,
+                        percentage: percentage,
+                        isCreator: true
+                    };
+                    
+                } catch (error) {
+                    console.error('❌ Dev wallet analysis failed:', error);
+                    return null;
+                }
+            }
+
+            displayDevWallet(devData) {
+                const content = document.getElementById('holder-content');
+                
+                let html = `
+                    <div class="dev-wallet-section">
+                        <div class="dev-header">
+                            <h3>DEVELOPER WALLET</h3>
+                        </div>
+                        <div class="dev-info">
+                            <div class="dev-address" onclick="copyToClipboard('${devData.address}')" title="Click to copy">
+                                ${this.formatAddress(devData.address)}
+                            </div>
+                            <div class="dev-stats">
+                                <div class="balance-large">${this.formatBalance(devData.balance.toString())}</div>
+                                <div class="percentage-large">${devData.percentage.toFixed(2)}% of supply</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                content.innerHTML = html;
+                console.log('✅ Displayed DEV wallet balance');
+            }
+
+            formatAddress(address) {
+                return `${address.slice(0, 6)}...${address.slice(-4)}`;
+            }
+
+            formatBalance(balance) {
+                const num = parseFloat(balance) / Math.pow(10, this.tokenDecimals);
+                if (num >= 1e9) return `${(num / 1e9).toFixed(2)}B`;
+                if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`;
+                if (num >= 1e3) return `${(num / 1e3).toFixed(2)}K`;
+                return num.toFixed(2);
+            }
+
+            showErrorState(error) {
+                const content = document.getElementById('holder-content');
+                content.innerHTML = `
+                    <div class="error-state">
+                        <div style="font-size: 3rem; color: #dc2626;">⚠️</div>
+                        <div class="error-message">
+                            <strong>Failed to load DEV wallet data</strong><br>
+                            ${error.message}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('📋 Copied:', text);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+
+        // Initialize when page loads
+        let holderWidget;
+        document.addEventListener('DOMContentLoaded', () => {
+            holderWidget = new HolderWidget();
+        });
+    </script>
+</body>
+</html>
